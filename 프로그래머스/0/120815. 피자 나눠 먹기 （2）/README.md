@@ -1,6 +1,6 @@
 # [level 0] 피자 나눠 먹기 (2) - 120815 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120815) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120815?language=python3) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 04월 30일 15:38:42
+2024년 04월 30일 15:41:58
 
 ### 문제 설명
 
