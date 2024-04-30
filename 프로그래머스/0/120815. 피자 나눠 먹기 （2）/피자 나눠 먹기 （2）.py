@@ -1,4 +1,4 @@
+import math
+
 def solution(n):
-    i = 1;
-    while (n*i) % 6: i += 1
-    return (n*i) // 6 
+    return (n * 6) // math.gcd(n, 6) // 6
