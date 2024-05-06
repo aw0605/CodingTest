@@ -1,4 +1,4 @@
 function solution(sides) {
-    const maxSide = Math.max(...sides)
-    return sides.reduce((a,c) => a + c, 0) - maxSide > maxSide? 1 : 2;
+    const [max, a, b] = sides.sort((a,b) => b-a);
+    return max < a + b ? 1 : 2
 }
