@@ -1,12 +1,16 @@
 function solution(my_string) {
-    let strArr = my_string.split(" ");
-    let answer = +strArr[0];
-    for (let i = 1; i < strArr.length; i++){
-        if (isNaN(+strArr[i])){
-            if (strArr[i] === "+"){
-                answer += +strArr[i+1]
-            } else {answer -= +strArr[i+1]}
+    const stack = [];
+    let sign = 1;
+    
+    for (const v of my_string.split(" ")) {
+        if (v === "+") {
+            sign = 1;
+        } else if (v === "-") {
+            sign = -1;
+        } else {
+            stack.push(v * sign);
         }
     }
-    return answer;
+
+    return stack.reduce((a,b) => a + b, 0);
 }
