@@ -1,3 +1,3 @@
 function solution(array) {
-    return ([...array.toString()].filter(v => v === "7")).length;
+    return (array.toString().split("7")).length - 1
 }
