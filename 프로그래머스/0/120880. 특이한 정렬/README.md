@@ -1,6 +1,6 @@
 # [level 0] 특이한 정렬 - 120880 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120880#) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120880?language=javascript) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 05월 13일 19:03:27
+2024년 05월 13일 19:05:46
 
 ### 문제 설명
 
