@@ -1,7 +1,5 @@
 function solution(n) {
-    let answer = [];
     for(let i = 2; i < n; i++){
-        if (n % i === 1) answer.push(i)
+        if (n % i === 1) return i
     }
-    return Math.min(...answer);
 }
