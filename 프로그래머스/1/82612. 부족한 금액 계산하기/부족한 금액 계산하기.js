@@ -1,5 +1,4 @@
 function solution(price, money, count) {
-    let total = new Array(count).fill(0).reduce((a,_,i) => a + (price * (i+1)), 0)
-
-    return money - total > 0? 0 : total - money;
+    const total = price * (count * (count + 1) / 2) - money;
+    return total > 0 ? total : 0;
 }
