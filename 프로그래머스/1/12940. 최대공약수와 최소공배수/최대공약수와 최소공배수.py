@@ -1,6 +1,5 @@
-from fractions import gcd
-
 def solution(n, m):
-    g = gcd(n,m)
-    l = (n*m)//g
-    return [g,l]
+    nm = n * m
+    while m != 0:
+        n, m = m, n % m
+    return [n, nm // n]
