@@ -1,11 +1,20 @@
 function solution(s) {
-    const enNum = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-    let answer = s;
+    let num_dic = {
+        "zero": "0",
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "six": "6",
+        "seven": "7",
+        "eight": "8",
+        "nine": "9",
+    };
 
-    for(let i = 0; i < enNum.length; i++) {
-        let arr = answer.split(enNum[i]);
-        answer = arr.join(i);
+    for (let [key, value] of Object.entries(num_dic)) {
+        s = s.split(key).join(value);
     }
 
-    return Number(answer);
+    return parseInt(s);
 }
