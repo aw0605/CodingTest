@@ -1,9 +1,2 @@
 def solution(sizes):
-    w = []
-    h = []
-    
-    for v in sizes:
-        w.append(max(v))
-        h.append(min(v))
-    
-    return max(w) * max(h)
+    return max(max(x) for x in sizes) * max(min(x) for x in sizes)
