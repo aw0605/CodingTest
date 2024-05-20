@@ -1,14 +1,19 @@
 function solution(s, n) {
-    let answer = '';
-    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    const lower = "abcdefghijklmnopqrstuvwxyz"
-    
-    for (let v of s){
-        if (v === " ") answer += v
-        else {
-            let Aa = upper.includes(v)? upper : lower;
-            answer += Aa[(Aa.indexOf(v)+n) % 26] 
+    let answer = "";
+
+    for (let v of s) {
+        if (v === ' ') {
+            answer += v;
+        } else {
+            let charCode = v.charCodeAt(0);
+            if (v >= 'A' && v <= 'Z') {
+                answer += String.fromCharCode((charCode-65+n)%26 + 65);
+            } else {
+                answer += String.fromCharCode((charCode-97+n)%26 + 97);
+
+            }
         }
     }
+
     return answer;
 }
