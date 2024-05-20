@@ -1,5 +1,6 @@
+num_dic = {"zero":"0", "one":"1", "two":"2", "three":"3", "four":"4", "five":"5", "six":"6", "seven":"7", "eight":"8", "nine":"9"}
+
 def solution(s):
-    enNum = ["zero","one","two","three","four","five","six","seven","eight","nine"]
-    for i,v in enumerate(enNum):
-        if v in s: s = s.replace(v,str(i))
+    for key, value in num_dic.items():
+        s = s.replace(key, value)
     return int(s)
