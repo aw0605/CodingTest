@@ -1,9 +1,11 @@
 function solution(s) {
-    const enNum = ['zero', 'one', 'two','three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    const enNum = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    let answer = s;
 
-    for(let v of enNum){               
-        if(s.includes(v)) s = s.replaceAll(v, enNum.indexOf(v));
+    for(let i = 0; i < enNum.length; i++) {
+        let arr = answer.split(enNum[i]);
+        answer = arr.join(i);
     }
 
-    return Number(s);
+    return Number(answer);
 }
