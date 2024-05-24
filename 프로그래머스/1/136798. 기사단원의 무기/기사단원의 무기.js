@@ -1,5 +1,5 @@
 function solution(number, limit, power) {
-    let gcdArr = [1];
+    let answer = 1;
     
     for (let k = 2; k <= number; k++){
         let gcdN = 0
@@ -9,8 +9,8 @@ function solution(number, limit, power) {
                 if (i !== k / i) gcdN++;
             };
         }
-        gcdArr.push(gcdN)
+        answer += (gcdN <= limit? gcdN : power)
     }
 
-    return gcdArr.reduce((a,c) => a + (c <= limit? c : power), 0);
+    return answer;
 }
