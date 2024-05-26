@@ -1,13 +1,9 @@
 function solution(babbling) {
-    let answer = 0;
-    const words = ["aya", "ye", "woo", "ma"];
-    
-    for (let v of babbling) {
-        for (let w of words) {
-            if (v.includes(w.repeat(2))) break;
-            v = v.split(w).join(" ");
-        }
-        if (v.split(" ").join("") === "") answer++
-    }
-    return answer;
+    // 주어진 발음 1회 이상 연속 반복 확인
+    const reg1 = /(aya|ye|woo|ma)\1+/;
+    // 처음부터 끝까지 주어진 발음으로만 구성되어 있는지 확인 
+    const reg2 = /^(aya|ye|woo|ma)+$/;
+
+    // test: 주어진 정규식 만족하는지 boolean리턴
+    return babbling.filter((v) => (!reg1.test(v) && reg2.test(v))).length;
 }
