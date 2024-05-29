@@ -1,7 +1,11 @@
 function solution(s, skip, index) {
-    const alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    const atoz = alpha.filter(v => !skip.includes(v));
-    
-    return [...s].reduce((a,c) => a += atoz[(atoz.indexOf(c)+index)%atoz.length], "");
+    let answer = '';
+    const atoz = 'abcdefghijklmnopqrstuvwxyz'.match(
+        new RegExp(`[^${skip}]`, 'g'),
+    );
+    for (const w of s) {
+        const newIdx = atoz.indexOf(w) + index;
+        answer += atoz[newIdx % atoz.length];
+    }
+  return answer;
 }
