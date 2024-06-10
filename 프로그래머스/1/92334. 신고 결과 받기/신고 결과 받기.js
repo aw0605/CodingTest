@@ -1,22 +1,17 @@
 function solution(id_list, report, k) {
-    let dec_dict = {}
-    let dec_count = {}
-    for (let id of id_list) {
-        dec_dict[id] = [];
-        dec_count[id] = 0;
+    let reports = [...new Set(report)].map(a=>{return a.split(' ')});
+    let dec_counts = new Map();
+    let mail_counts = new Map();
+    
+    for (const report of reports){
+        dec_counts.set(report[1],dec_counts.get(report[1])+1||1)
     }
     
-    for (let user of report){
-        let [uId, dcId] = user.split(" ");
-        dec_dict[dcId].push(uId);
-    }
-    
-    id_list.forEach((v) => {
-        dec_dict[v] = [...new Set([...dec_dict[v]])];
-        if(dec_dict[v].length >= k){
-            dec_dict[v].forEach(i => dec_count[i]++);
+    for(const report of reports){
+        if(dec_counts.get(report[1])>=k){
+            mail_counts.set(report[0],mail_counts.get(report[0])+1||1)
         }
-    });
-
-    return Object.values(dec_count);
+    }
+    
+    return id_list.map(v => mail_counts.get(v)||0);
 }
