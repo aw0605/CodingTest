@@ -1,29 +1,27 @@
-def find_start(park):
-    for y, x in enumerate(park):
-        if "S" in x: return [y, x.index("S")]
-    return [-1, -1]
-
-def move_location(start, direction, distance, park):
-    initial_y, initial_x = start
-    y, x = start
-
-    for i in range(distance):
-        y += direction[0]
-        x += direction[1]
-        if 0 <= y < len(park) and 0 <= x < len(park[0]) and park[y][x] != "X":
-            continue
-        else: return [initial_y, initial_x]
-    
-    return [y, x]
+dx = {'N':-1, 'S':1, 'E':0, 'W': 0}
+dy = {'N': 0, 'S':0, 'E':1, 'W':-1}
 
 def solution(park, routes):
-    start = find_start(park)
-    directions = {"N": [-1, 0], "S": [1, 0], "W": [0, -1], "E": [0, 1]}
+    answer = []
+    x, y = -1, -1
+    for i, j in enumerate(park):
+        if "S" in j: x, y = i, j.index("S") 
 
     for route in routes:
-        direction = directions[route[0]]
-        distance = int(route[2])
+        direc, dist = route.split(' ')
+        isFalse = False
+        
+        for i in range(1, int(dist) + 1):
+            nx, ny = x + dx[direc] * i, y + dy[direc] * i
+            if nx < 0 or ny < 0 or nx > len(park)-1 or ny > len(park[0])-1 or park[nx][ny] == 'X':
+                isFalse = True
+                break
 
-        start = move_location(start, direction, distance, park)
+        if isFalse: continue
+        nx, ny = x + dx[direc] * int(dist), y + dy[direc] * int(dist)
+        x, y = nx, ny
 
-    return start
+    answer = [x, y]
+
+    return answer
+
