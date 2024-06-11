@@ -1,22 +1,17 @@
 def solution(bandage, health, attacks):
+    hp = health
     time, recovery, bonus = bandage
-    max_health = health
-    cur_health = health
-    series = 0
+    start = 1
     
-    attack_dict = {t: attack for t, attack in attacks}
+    for t, attack in attacks:
+        # 공격받기 전까지의 hp계산
+        hp += ((t - start) // time) * bonus + (t - start) * recovery
+        # 공격받은 후로 start 초기화
+        start = t + 1
+        # 최대 회복량 설정
+        if hp >= health: hp = health
+        # 체력에서 피해량만큼 감소
+        hp -= attack
+        if hp <= 0: return -1
     
-    for i in range(1, attacks[-1][0] + 1):
-        if i in attack_dict:
-            cur_health -= attack_dict[i]
-            series = 0
-            if cur_health <= 0: return -1
-        else:
-            cur_health += recovery
-            series += 1
-            if series == time:
-                cur_health += bonus
-                series = 0
-            if cur_health > max_health: cur_health = max_health
-    
-    return cur_health
+    return hp
