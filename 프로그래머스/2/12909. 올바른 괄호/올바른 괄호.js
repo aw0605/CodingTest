@@ -1,10 +1,10 @@
 function solution(s){
-    let stack = []
-
-    for (let v of s){
-        if(stack[stack.length-1] == "(" && v == ")") stack.pop();
-        else stack.push(v)
+    let answer = 0
+    
+    for (let v of s) {
+        answer += v === "("? 1 : -1
+        if (answer < 0) return false
     }
-
-    return stack.length > 0? false : true;
+    
+    return answer === 0? true : false;
 }
