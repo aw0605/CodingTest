@@ -1,5 +1,2 @@
 def solution(A,B):
-    A.sort()
-    B.sort(reverse=True)
-
-    return sum(i*j for i, j in zip(A, B))
+    return sum([i*j for i, j in zip(sorted(A), sorted(B, reverse=True))])
