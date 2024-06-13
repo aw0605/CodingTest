@@ -1,4 +1,4 @@
 function solution(s) {
-    const numArr = s.split(" ").map(v => +v)
-    return `${Math.min(...numArr)} ${Math.max(...numArr)}`;
+    const arr = s.split(" ")
+    return `${Math.min(...arr)} ${Math.max(...arr)}`
 }
