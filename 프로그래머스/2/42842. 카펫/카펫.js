@@ -1,7 +1,8 @@
 function solution(brown, yellow) {
-    for(let i = 0; i <= yellow ** 0.5; i++){
-        if(yellow % i === 0 && yellow/i*2 + i*2 + 4 === brown){
-            return [yellow/i+2, i+2]
-        }
-    }
+    const x = (brown - 12) * 0.5;
+    const y = yellow - brown + 8;
+    const i = (8 + x + Math.sqrt(Math.pow(x, 2) - (4 * y))) * 0.5;
+    const j = (8 + x - Math.sqrt(Math.pow(x, 2) - (4 * y))) * 0.5;
+
+    return [i, j];
 }
