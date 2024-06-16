@@ -1,14 +1,10 @@
 function solution(people, limit) {
-    let boat = 0;
-    let first = 0;
-    let last = people.length-1
     people.sort((a,b) => a - b)
+    let i;
     
-    while (first <= last) {
-        if (people[first] + people[last] <= limit) first++;
-        last--;
-        boat++;
-    }
+    for (i = 0, j = people.length-1; i < j; j--) {
+        if(people[i] + people[j] <= limit) i++;
+    } 
     
-    return boat;
+    return people.length - i;
 }
