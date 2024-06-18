@@ -1,10 +1,10 @@
 function solution(n, words) {
-    let answers = [words[0]];
+    let answer = 0;
     
-    for (let i = 1; i < words.length; i++){
-        if (answers.includes(words[i]) || words[i-1][words[i-1].length-1] !== words[i][0]) return [(i%n)+1, Math.trunc(i/n)+1]
-        answers.push(words[i])
-    }
+    words.reduce((a, c, i) => {
+        answer = answer || ((words.slice(0, i).indexOf(c) !== -1 || a !== c[0]) ? i : answer);
+        return c[c.length-1];
+    }, "")
 
-    return [0,0];
+    return answer ? [answer%n+1, Math.floor(answer/n)+1] : [0,0];
 }
