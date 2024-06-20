@@ -1,7 +1,7 @@
 def solution(citations):
-    answer = []
+    citations = sorted(citations)
     
-    for i in range(len(citations)+1):
-        if len(list(filter(lambda x: x >= i, citations))) >= i: answer.append(i)
-
-    return max(answer)
+    for i in range(len(citations)):
+        if citations[i] >= len(citations)-i: return len(citations)-i
+    
+    return 0
