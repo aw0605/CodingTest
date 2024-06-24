@@ -1,15 +1,2 @@
 def solution(arr1, arr2):
-    answer = []
-
-    for i in range(len(arr1)):
-        result = []
-        
-        for j in range(len(arr2[0])):
-            n = 0
-            for k in range(len(arr1[0])):
-                n += arr1[i][k] * arr2[k][j]
-            result.append(n)
-            
-        answer.append(result)
-
-    return answer
+     return [[sum(a*b for a, b in zip(A1,A2)) for A2 in zip(*arr2)] for A1 in arr1]
