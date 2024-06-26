@@ -1,21 +1,19 @@
 function solution(progresses, speeds) {
-    let answer = [];
-    let rest = [];
+    let answer = [0];
+    let rest = []
     for (let i = 0; i < speeds.length; i++){
         rest.push(Math.ceil((100 - progresses[i]) / speeds[i]))
     }
     
-    let before = rest[0];
-    let d = 1;
-    for (let i = 1; i < rest.length; i++) {
-        if (rest[i] <= before) d++;
+    let max = rest[0];
+
+    for (let i = 0, j = 0; i< rest.length; i++){
+        if(rest[i] <= max) answer[j] += 1;
         else {
-            answer.push(d);
-            d = 1;
-            before = rest[i];
+            max = rest[i];
+            answer[++j] = 1;
         }
     }
-    answer.push(d)
-    
+
     return answer;
 }
