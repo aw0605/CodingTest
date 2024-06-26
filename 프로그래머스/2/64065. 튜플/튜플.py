@@ -1,14 +1,7 @@
 import re
+from collections import Counter
 
 def solution(s):
-    result = []
-    for v in s.split("},"):
-        result.append(re.sub(r"[{}]", "", v).split(","))
-    result.sort(key=len)
+    s = Counter(re.findall('\d+', s))
     
-    answer = []
-    for i in result:
-        for j in i:
-            if j not in answer: answer.append(j)
-            
-    return [int(v) for v in answer]
+    return list(map(int, [k for k, v in sorted(s.items(), key=lambda x: x[1], reverse=True)]))
