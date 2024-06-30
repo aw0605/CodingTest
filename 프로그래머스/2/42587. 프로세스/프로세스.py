@@ -1,10 +1,12 @@
 def solution(priorities, location):
-    queue =  [[i,v] for i,v in enumerate(priorities)]
-    
+    total = len(priorities)
     answer = 0
+    cur = 0
     while True:
-        cur = queue.pop(0)
-        if any(cur[1] < v[1] for v in queue): queue.append(cur)
-        else:
+        if max(priorities) == priorities[cur % total]:
+            priorities[cur % total] = 0
             answer += 1
-            if cur[0] == location: return answer
+            if cur % total == location: break
+        cur += 1
+        
+    return answer
