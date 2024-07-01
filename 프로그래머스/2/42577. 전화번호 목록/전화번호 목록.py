@@ -1,9 +1,7 @@
 def solution(phone_book):
-    setNumbers = set(phone_book)
-    
-    for v in phone_book:
-        for i in range(1, len(v)):
-            prefix = v[:i]
-            if prefix in setNumbers: return False
+    phoneBook = sorted(phone_book)
+
+    for p, v in zip(phoneBook, phoneBook[1:]):
+        if v.startswith(p): return False
         
     return True
