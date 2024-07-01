@@ -1,16 +1,16 @@
 function solution(priorities, location) {
-    let total = priorities.length;
-    let answer = 0;
-    let cur = 0;
-    
-    while (true) {
-        if (Math.max(...priorities) === priorities[cur % total]){
-            priorities[cur % total] = 0;
-            answer++;
-            if ((cur % total) === location) break;
-        }
-        cur++;
+    let arr = priorities.map((v, i) => {
+        return {val: v, idx: i};
+    });
+
+    let answer = [];
+
+    while (arr.length > 0) {
+        let cur = arr.shift();
+        let notMax = arr.some(v => v.val > cur.val);
+        if (notMax) arr.push(cur);
+        else answer.push(cur);
     }
-    
-    return answer;
+
+    return answer.findIndex(v => v.idx === location) + 1;
 }
