@@ -1,18 +1,15 @@
-from collections import Counter
 import re
 
 def solution(str1, str2):
-    
-    def slice_str(s):
-        arr = []
-        for i in range(len(s)-1):
-            if re.match('[a-zA-Z]{2}', s[i:i+2]): arr.append(s[i:i+2].lower())
-        return arr
-    
-    c1 = Counter(slice_str(str1))
-    c2 = Counter(slice_str(str2))
-    
-    intersection = sum((c1 & c2).values())
-    union = sum((c1 | c2).values())
-    
-    return 65536 if union == 0 else int(intersection / union * 65536)
+    str1 = [str1[i:i+2].lower() for i in range(len(str1)-1) if re.match('[a-zA-Z]{2}', str1[i:i+2])]
+    str2 = [str2[i:i+2].lower() for i in range(len(str2)-1) if re.match('[a-zA-Z]{2}', str2[i:i+2])]
+
+    intersection = set(str1) & set(str2)
+    union = set(str1) | set(str2)
+
+    if len(union) == 0: return 65536
+
+    intersection = sum(min(str1.count(v), str2.count(v)) for v in intersection)
+    union = sum(max(str1.count(v), str2.count(v)) for v in union)
+
+    return int((intersection/union) * 65536)
