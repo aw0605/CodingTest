@@ -1,21 +1,25 @@
 function solution(cacheSize, cities) {
-    let cache = []
-    let time = 0;
-    
-    cities.forEach(v => {
-        const city = v.toLowerCase();
-        if (cacheSize) {
-            if (!cache.includes(city)){
-                if (cache.length == cacheSize) cache.shift()
-                cache.push(city)
-                time += 5
-            } else {
-                cache.splice(cache.indexOf(city),1)
-                cache.push(city)
-                time++
-            }
-        } else time += 5
-    })
-    
+    const MISS = 5, HIT = 1;
+
+    if (!cacheSize) return MISS * cities.length;
+
+    let time = 0,
+        cache = [];
+
+    cities.forEach(city => {
+        city = city.toLowerCase();
+
+        let idx = cache.indexOf(city);
+
+        if (idx !== -1) {
+            cache.splice(idx, 1);
+            time += HIT;
+        } else {
+            if (cache.length === cacheSize) cache.shift();
+            time += MISS;
+        }
+        cache.push(city);
+    });
+
     return time;
 }
