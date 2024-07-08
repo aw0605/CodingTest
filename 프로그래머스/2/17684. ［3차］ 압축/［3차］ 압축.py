@@ -1,20 +1,17 @@
 def solution(msg):
     answer = []
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    dictAlpha = {v: i + 1 for i, v in enumerate(alpha)}
-    dictAlpha["nextIdx"] = 27
+    dictAlpha = {v:i+1 for i,v in enumerate(alpha)}
     
-    i = 0
-    while i < len(msg):
-        w = msg[i]
-        j = i + 1
-        while j <= len(msg) and dictAlpha.get(msg[i:j]) is not None:
-            w = msg[i:j]
-            j += 1
-        answer.append(dictAlpha[w])
-        if j <= len(msg):
-            dictAlpha[msg[i:j]] = dictAlpha["nextIdx"]
-            dictAlpha["nextIdx"] += 1
-        i += len(w)
-        
+    while True:
+        if msg in dictAlpha:
+            answer.append(dictAlpha[msg])
+            break
+        for i in range(1, len(msg)+1):
+            if msg[0:i] not in dictAlpha:
+                answer.append(dictAlpha[msg[0:i-1]])
+                dictAlpha[msg[0:i]] = len(dictAlpha)+1
+                msg = msg[i-1:]
+                break
+
     return answer
