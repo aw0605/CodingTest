@@ -1,16 +1,16 @@
 function solution(prices) {
-    let answer = new Array(prices.length).fill(0);
-    let stack = []
+    const answer = [];
+    const tmp = prices.reverse()
     
-    for (let i = 0; i < prices.length; i++){
-        while (stack.length && stack[stack.length-1][1] > prices[i]){
-            let [past, _] = stack.pop();
-            answer[past] = i - past;
+    while (tmp.length) {
+        const price = tmp.pop()
+        let sec = 0;
+        for (let i = tmp.length - 1; i >= 0; i--) {
+            sec += 1
+            if (price > tmp[i]) break
         }
-        stack.push([i,prices[i]])
+        answer.push(sec)
     }
     
-    for (let [i, _] of stack) answer[i] = prices.length - 1 - i
-    
-    return answer;
+    return answer ;
 }
