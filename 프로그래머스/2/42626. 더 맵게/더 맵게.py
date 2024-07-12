@@ -1,15 +1,15 @@
-import heapq
+import heapq as hq
 
 def solution(scoville, K):
     answer = 0
-    heap = []
-    for i in scoville: heapq.heappush(heap, i)
+    hq.heapify(scoville)
+    
+    while True:
+        first = hq.heappop(scoville)
+        if first >= K: break
+        if len(scoville) == 0: return -1
+        second = hq.heappop(scoville)
+        hq.heappush(scoville, first + second*2)
+        answer += 1  
 
-    while heap[0] < K:
-        if len(heap) == 1 and heap[0] < K: return -1
-    
-        smallest = heapq.heappop(heap)
-        heapq.heappush(heap, smallest + heapq.heappop(heap) * 2)
-        answer += 1
-    
     return answer
