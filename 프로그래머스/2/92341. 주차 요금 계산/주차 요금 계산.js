@@ -1,37 +1,21 @@
 function solution(fees, records) {
-    let answer = [];
-    let parkDict = {};
-    const [dt, df, at, af] = fees;
-
+    const answer = [];
+    const parkingTime = {};
+    
     records.forEach(v => {
-        let [t, n, s] = v.split(" ");
-        let [h, m] = t.split(":").map(Number);
-        t = h * 60 + m;
-
-        if (!parkDict[n]) {parkDict[n] = [0, t, s];}
-        else {
-            if (s === "IN") {
-                parkDict[n][1] = t;
-                parkDict[n][2] = s;
-            } else {
-                parkDict[n][0] += t - parkDict[n][1];
-                parkDict[n][2] = s;
-            }
-        }
+        let [t, n, s] = v.split(' ');
+        let [h, m] = t.split(':');
+        t = (h * 1) * 60 + (m * 1);
+        if (!parkingTime[n]) parkingTime[n] = 0;
+        if (s === 'IN') parkingTime[n] += (1439 - t);
+        if (s === 'OUT') parkingTime[n] -= (1439 - t);
     });
-
-    Object.keys(parkDict).forEach(n => {
-        let [total, last, s] = parkDict[n];
-        if (s === "IN") {
-            total += 1439 - last;
-            parkDict[n][2] = "OUT";
-        }
-
-        let f = df;
-        if (total > dt) f += Math.ceil((total - dt) / at) * af;
-        answer.push([n, f]);
-    });
-
-    answer.sort((a, b) => a[0].localeCompare(b[0]));
-    return answer.map(([n, f]) => f);
+    
+    for (let [n, t] of Object.entries(parkingTime)) {
+        if (t <= fees[0]) t = fees[1];
+        else t = Math.ceil((t - fees[0]) / fees[2]) * fees[3] + fees[1]
+        answer.push([n, t]);
+    }
+    
+    return answer.sort((a, b) => a[0] - b[0]).map(v => v[1]);
 }
