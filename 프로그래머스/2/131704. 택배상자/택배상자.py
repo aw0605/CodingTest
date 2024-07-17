@@ -1,12 +1,14 @@
 def solution(order):
     answer = 0
-    storage = []
+    stacks = []
+    i = 1
     
-    for i, n in enumerate(order):
-        storage.append(i+1)
-
-        while storage and storage[-1] == order[answer]:
-            storage.pop()
+    while i < len(order)+1:
+        stacks.append(i)
+        while stacks[-1] == order[answer]:
             answer += 1
+            stacks.pop()
+            if len(stacks) == 0: break
+        i += 1
 
     return answer
