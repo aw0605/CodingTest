@@ -1,12 +1,12 @@
 def solution(order):
     answer = 0
     storage = []
-    j = 0
-    for i in range(1, len(order) + 1):
-        storage.append(i)
-        while storage and (storage[-1] == order[j]):
-            answer += 1
-            j += 1
+    
+    for i, n in enumerate(order):
+        storage.append(i+1)
+
+        while storage and storage[-1] == order[answer]:
             storage.pop()
+            answer += 1
 
     return answer
