@@ -1,22 +1,22 @@
 function solution(order) {
-    let answer = 0;
-    let n = 1;
-    const stack = [];
+    let storage = [], n = 1, answer = 0
     
-    while (true) {
-        if (order.length === answer) break;
-        if (order[answer] === n) {
-            answer++;
-            n++;
-        } else if (stack[stack.length - 1] === order[answer]){
-            stack.pop();
-            answer++;
-        } else if (stack[stack.length - 1] !== order[answer]) {
-            if (order[answer] < stack[stack.length - 1]) break;
-            stack.push(n);
-            n++;
+    for (let i = 0; i < order.length; i++){
+        let o = order[i]
+        if (storage.length && storage[storage.length-1] == o){
+            storage.pop()
+            answer++
+            continue
         }
+        
+        while (o != n){
+            storage.push(n)
+            n++
+            if (n > order.length) return answer
+        }
+        n++
+        answer++
     }
-
-    return answer;
+    
+    return answer
 }
