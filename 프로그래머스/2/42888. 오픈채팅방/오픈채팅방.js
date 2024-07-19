@@ -1,17 +1,19 @@
 function solution(record) {
-    let answer = [];
-    let user = {}
-    
-    for (let v of record){
-        v = v.split(" ")
-        if (v[0] !== "Leave") user[v[1]] = v[2]
+    const user = {};
+    const answer = [];
+    const status = {
+        'Enter': '님이 들어왔습니다.',
+        'Leave': '님이 나갔습니다.'
     }
-    
-    for (let v of record){
-        v = v.split(" ")
-        if (v[0] === "Enter") answer.push(`${user[v[1]]}님이 들어왔습니다.`)
-        else if (v[0] === "Leave") answer.push(`${user[v[1]]}님이 나갔습니다.`)
-    }
-    
-    return answer;
+
+    record.forEach((v) => {
+        const [s, id, nick] = v.split(' ');
+
+        if (s !== "Change") answer.push([s, id]);
+        if (nick) user[id] = nick;
+    })
+
+    return answer.map(([s, id]) => {
+        return `${user[id]}${status[s]}`;    
+    })
 }
