@@ -1,5 +1,17 @@
 function solution(record) {
-    let nick = {}, a = record.map(v => v.split(' '))
-    a.slice().reverse().forEach(v => { if (v[2] && !nick[v[1]]) { nick[v[1]] = v[2] } })
-    return a.filter(v => { return v[0] !== 'Change' }).map(v => { return v[0] === 'Enter' ? nick[v[1]] + '님이 들어왔습니다.' : nick[v[1]] + '님이 나갔습니다.' })
+    let answer = []
+    const user = new Map()
+
+    record.forEach(v => {
+        let [s, uid, nick] = v.split(' ')
+        if (s === 'Enter' || s === 'Change') user.set(uid, nick)
+    })
+
+    record.forEach(v => {
+        let [s, uid] = v.split(' ')
+        if (s === 'Enter') answer.push(`${user.get(uid)}님이 들어왔습니다.`)
+        if (s === 'Leave') answer.push(`${user.get(uid)}님이 나갔습니다.`)
+    })
+
+    return answer
 }
