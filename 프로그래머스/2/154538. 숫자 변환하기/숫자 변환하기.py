@@ -1,0 +1,17 @@
+from collections import deque
+
+def solution(x, y, n):
+    visited = [0] * 1000001
+    q = deque()
+    visited[x] = 1
+    q.append((x, 0))
+    
+    while q:
+        num, cnt = q.popleft()
+        if num == y: return cnt
+        for next_num in (num + n, num * 2, num * 3):
+            if next_num <= y and not visited[next_num]:
+                visited[next_num] = 1
+                q.append((next_num, cnt + 1))
+
+    return -1
