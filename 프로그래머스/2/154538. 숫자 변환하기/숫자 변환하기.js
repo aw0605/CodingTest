@@ -1,14 +1,20 @@
 function solution(x, y, n) {
-    let answer = 0;
-    let que = [[y, 0]];
+    if (x === y) return 0;
+    const dp = {};
+    let data = [x];
+    dp[x] = 0;
     
-    while (que.length) {
-        const [num, i] = que.shift();
-        if (num === x) return i;
-        
-        if (num % 2 === 0 && num/2 >= x) que.push([num/2, i+1]);
-        if (num % 3 === 0 && num/3 >= x) que.push([num/3, i+1]);
-        if (num-n >= x) que.push([num-n, i+1]);
+    while (data.length) {
+        const newData = [];
+        for (const d of data) {
+            for (const e of [d + n, d * 2, d * 3]) {
+                if (e > y || dp[e]) continue;
+                if (e === y) return dp[d] + 1;
+                dp[e] = dp[d] + 1;
+                newData.push(e);
+            }
+        }
+        data = newData;
     }
     
     return -1;
