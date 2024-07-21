@@ -1,17 +1,14 @@
+from collections import deque
 def solution(x, y, n):
-    answer = 0
-    s = set()
-    s.add(x)
-
-    while s:
-        if y in s: return answer
-        nxt = set()
-        for i in s:
-            if i+n <= y: nxt.add(i+n)
-            if i*2 <= y: nxt.add(i*2)
-            if i*3 <= y:nxt.add(i*3)
-            
-        s = nxt
-        answer += 1
+    q = deque()
+    q.append([y,0])
+    
+    while q:
+        y,cnt = q.popleft()
+        if y == x: return cnt
+        if y < x: continue
+        q.append([y-n, cnt+1])
+        if y % 2 ==0 : q.append([y//2, cnt+1])
+        if y % 3 ==0 : q.append([y//3, cnt+1])
 
     return -1
