@@ -1,10 +1,10 @@
 # [level 2] [1차] 프렌즈4블록 - 17679 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/17679) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/17679?language=javascript) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 150.92 ms
+메모리: 37.5 MB, 시간: 20.48 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 07월 25일 17:58:52
+2024년 07월 25일 18:03:08
 
 ### 문제 설명
 
