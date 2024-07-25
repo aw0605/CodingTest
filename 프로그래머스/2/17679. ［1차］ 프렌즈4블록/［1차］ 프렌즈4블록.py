@@ -1,34 +1,29 @@
 def solution(m, n, board):
+    b = [list(v) for v in board]
     answer = 0
-    board = [list(v) for v in board]
+    point = 1
     
-    tmp = set()
-    
-    while True:    
-        for i in range(m-1) :
-            for j in range(n-1):
-                c = board[i][j]
-                if (c == []): continue
-                else :
-                    if(board[i][j+1] == c and board[i+1][j] == c and board[i+1][j+1] == c) :
-                        tmp.add((i,j))
-                        tmp.add((i,j+1))
-                        tmp.add((i+1,j))
-                        tmp.add((i+1,j+1))
-                        
-        if tmp:
-            answer += len(tmp)
-            for i,j in tmp: board[i][j] = []
-            tmp = set()
-        else: break
-        
-        while True:
-            moved = 0
-            for i in range(m-1) :
-                for j in range(n) :
-                    if (board[i][j] and board[i+1][j] == []) :
-                        board[i][j],board[i+1][j] = board[i+1][j],board[i][j]
-                        moved = 1
-            if moved == 0: break
-    
+    while point != 0:
+        pop = []
+        point = 0
+
+        for i in range(m - 1):
+            for j in range(n - 1):
+                if b[i][j] == b[i][j + 1] == b[i + 1][j] == b[i + 1][j + 1] != '팡!':
+                    pop.append((i, j))
+                    point += 1
+
+        for i, j in pop:
+            b[i][j] = b[i][j + 1] = b[i + 1][j] = b[i + 1][j + 1] = '팡!'
+
+        for j in range(n):
+            for i in range(m - 1, 0, -1):
+                if b[i][j] == '팡!':
+                    for k in range(i - 1, -1, -1):
+                        if b[k][j] != '팡!':
+                            b[i][j], b[k][j] = b[k][j], '팡!'
+                            break
+
+    for v in b: answer += v.count('팡!')
+
     return answer
