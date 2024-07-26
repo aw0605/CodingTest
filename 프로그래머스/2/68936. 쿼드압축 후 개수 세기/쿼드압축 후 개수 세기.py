@@ -1,24 +1,21 @@
+def divide(arr):
+    size = len(arr)//2
+    lu = [i[:size] for i in arr[:size]]
+    ld = [i[:size] for i in arr[size:]]
+    ru = [i[size:] for i in arr[:size]]
+    rd = [i[size:] for i in arr[size:]]
+    return lu, ld, ru, rd
+
+def ziper(arr):
+    size = len(arr)
+    s = sum(sum(i) for i in arr)
+    if s == size**2: return [1]
+    elif s == 0: return [0]
+    else:
+        lu, ld, ru, rd = divide(arr)
+        return ziper(lu) + ziper(ld) + ziper(ru) + ziper(rd)
+
 def solution(arr):
-    answer = [0, 0]
+    zip_res = ziper(arr)
 
-    def check(x, y, size):
-        if size == 1:
-            answer[arr[y][x]] += 1
-            return
-        else:
-            first = arr[y][x]
-
-            for dy in range(size):
-                for dx in range(size):
-                    if first != arr[y + dy][x + dx]:
-                        divideLen = size // 2
-                        check(x, y, divideLen)
-                        check(x + divideLen, y, divideLen)
-                        check(x, y + divideLen, divideLen)
-                        check(x + divideLen, y + divideLen, divideLen)
-                        return
-            answer[first] += 1
-
-    check(0, 0, len(arr))
-
-    return answer
+    return [len(zip_res) - sum(zip_res), sum(zip_res)]
