@@ -1,25 +1,35 @@
-function isPrime(n) {
-    if (n <= 1) return false;
-    for (let i = 2; i <= Math.sqrt(n); i++) {
-        if (n % i == 0) return false;
+function isPrime(num) {
+    if (num < 2) return false;
+    if (num === 2) return true;
+    for (var i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) return false;
     }
     return true;
 }
 
 function solution(numbers) {
-    const answer = new Set();
-    let nums = numbers.split('');
+    let answer = 0;
 
-    const getPermutation = (arr, fix) => {
-        for (let i = 0; i < arr.length; i++) {
-            const copy = [...arr];
-            const newN = +(fix + arr[i]);
-            copy.splice(i, 1);
-            if (!answer.has(newN) && isPrime(newN)) answer.add(newN);
-            getPermutation(copy, fix + arr[i]);
+    let n = numbers.split('');
+    let nums = new Set()
+
+    function combi(a, s) {
+        if (s.length > 0) {
+            if (nums.has(+s) === false) {
+                nums.add(+s);
+                if (isPrime(+s)) answer++;
+            }
         }
-    };
+        if (a.length > 0) {
+            for (let i = 0; i< a.length; i++) {
+                let t = a.slice(0)
+                t.splice(i,1);
+                combi(t,s + a[i]);
+            }
+        }
+    }
+    
+    combi(n,'');
 
-    getPermutation(nums, '');
-    return answer.size;
+    return answer;
 }
