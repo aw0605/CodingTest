@@ -1,21 +1,10 @@
-primeSet = set()
+from itertools import permutations
 
-def isPrime(number):
-    if number in (0, 1):return False
-    for i in range(2, number):
-        if number % i == 0: return False
-    return True
-
-
-def makeCombinations(str1, str2):
-    if str1 != "":
-        if isPrime(int(str1)): primeSet.add(int(str1))
-
-    for i in range(len(str2)):
-        makeCombinations(str1 + str2[i], str2[:i] + str2[i + 1:])
-
-
-def solution(numbers):
-    makeCombinations("", numbers)
-
-    return len(primeSet)
+def solution(n):
+    answer = set()
+    for i in range(len(n)):
+        answer |= set(map(int, map("".join, permutations(list(n), i + 1))))
+    answer -= set(range(0, 2))
+    for i in range(2, int(max(answer) ** 0.5) + 1):
+        answer -= set(range(i * 2, max(answer) + 1, i))
+    return len(answer)
