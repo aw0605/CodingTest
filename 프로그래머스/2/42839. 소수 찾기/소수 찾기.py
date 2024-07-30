@@ -1,23 +1,21 @@
-import math
-from itertools import permutations
+primeSet = set()
 
-def isPrime(n):
-    if n <= 1: return False
-    for i in range(2, int(math.sqrt(n)) + 1):
-        if n % i == 0: return False
+def isPrime(number):
+    if number in (0, 1):return False
+    for i in range(2, number):
+        if number % i == 0: return False
     return True
 
-def solution(numbers):
-    answer = set()
-    nums = list(numbers)
-    
-    def get_permutation(arr, fix):
-        for i in range(len(arr)):
-            copy = arr[:i] + arr[i+1:]
-            newN = int(fix + arr[i])
-            if newN not in answer and isPrime(newN): answer.add(newN)
-            get_permutation(copy, fix + arr[i])
-    
-    get_permutation(nums, '')
-    return len(answer)
 
+def makeCombinations(str1, str2):
+    if str1 != "":
+        if isPrime(int(str1)): primeSet.add(int(str1))
+
+    for i in range(len(str2)):
+        makeCombinations(str1 + str2[i], str2[:i] + str2[i + 1:])
+
+
+def solution(numbers):
+    makeCombinations("", numbers)
+
+    return len(primeSet)
