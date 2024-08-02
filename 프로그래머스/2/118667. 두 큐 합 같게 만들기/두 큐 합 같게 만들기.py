@@ -1,18 +1,14 @@
 def solution(queue1, queue2):
-    target = (sum(queue1) + sum(queue2)) // 2
-    sum1 = sum(queue1)
-    queue3 = queue1 + queue2 + queue1
-    s = 0
-    e = len(queue1) - 1
+    indicator2 = sum(queue1)-int(sum(queue1+queue2)/2)
     answer = 0
+    sub_list = (queue1+queue2+queue1)[::-1]
+    add_list = (queue2+queue1+queue2)[::-1]
     
-    while True:
-        if sum1 == target: return answer
-        if sum1 < target:
-            e += 1
-            if e >= len(queue3): return -1
-            sum1 += queue3[e]
-        else:
-            sum1 -= queue3[s]
-            s += 1
+    while indicator2 != 0:
+        try:
+            if indicator2 > 0: indicator2 -= sub_list.pop()
+            else: indicator2 += add_list.pop()
+        except: return -1
         answer += 1
+        
+    return answer
