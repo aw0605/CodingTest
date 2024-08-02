@@ -3,7 +3,7 @@ function solution(queue1, queue2) {
     const max = queue1.length * 2
     let sum = queue1.reduce((a,c,i)=> a + c - queue2[i],0)/2
     let [i,j] = [0,0]
-    while (sum !== 0 && answer < max*2){
+    while (sum !== 0 && answer < max+3){
         if (sum > 0){
             const v = queue1[i]
             i++
