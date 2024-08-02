@@ -1,18 +1,22 @@
-const solution = (queue1, queue2) => {
-  let sum1 = queue1.reduce((prev, cur) => prev + cur, 0);
-  let sum2 = queue2.reduce((prev, cur) => prev + cur, 0);
-  const half = (sum1 + sum2) / 2;
-  const q = [...queue1, ...queue2];
-  let q1Pointer = 0;
-  let q2Pointer = queue1.length;
-
-  for (let cnt = 0; cnt < queue1.length * 3; cnt++) {
-    if (sum1 === half) return cnt;
-    sum1 =
-      sum1 > half
-        ? sum1 - q[q1Pointer++ % q.length]
-        : sum1 + q[q2Pointer++ % q.length];
-  }
-
-  return -1;
-};
+function solution(queue1, queue2) {
+    let answer = 0
+    const max = queue1.length * 2
+    let sum = queue1.reduce((a,c,i)=> a + c - queue2[i],0)/2
+    let [i,j] = [0,0]
+    while (sum !== 0 && answer < max*2){
+        if (sum > 0){
+            const v = queue1[i]
+            i++
+            sum -= v
+            queue2.push(v)
+        } else {
+            const v = queue2[j]
+            j++
+            sum += v
+            queue1.push(v)
+        }
+        answer++
+    }
+    
+    return sum !== 0 ? -1 : answer
+}
