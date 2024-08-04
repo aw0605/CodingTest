@@ -1,13 +1,17 @@
 function solution(number, k) {
-    let answer = [];
+    const answer = []
+    let i = 0
 
-    for (let n of number) {
-        while (k > 0 && answer.length && answer[answer.length - 1] < n) {
-            answer.pop();
-            k--;
+    answer.push(number[i++])
+    
+    while (answer.length < number.length - k || i < number.length) {
+        if (k && answer[answer.length-1] < number[i]) {
+            answer.pop()
+            k--
+            continue
         }
-        answer.push(n);
+        answer.push(number[i++])
     }
 
-    return answer.slice(0, answer.length - k).join('');
+    return answer.slice(0, number.length - k).join('')
 }
