@@ -1,17 +1,21 @@
-function solution(number, k) {
-    const answer = []
-    let i = 0
-
-    answer.push(number[i++])
+const solution = (number, k) => {
+    const stack = [];
+    let count = 0;
     
-    while (answer.length < number.length - k || i < number.length) {
-        if (k && answer[answer.length-1] < number[i]) {
-            answer.pop()
-            k--
-            continue
+    for (let i = 0; i < number.length; i++) {
+        const item = number[i]
+        if (stack.length === 0) {
+            stack.push(item)
+            continue;
         }
-        answer.push(number[i++])
+        while (stack[stack.length - 1] < item) {
+            stack.pop()
+            count++
+            if (count === k) return stack.join("") + number.slice(i, number.length)
+            if (stack.length === 0) break;
+        }
+        stack.push(item)
     }
 
-    return answer.slice(0, number.length - k).join('')
+    return stack.join("").slice(0, number.length - k + count)
 }
