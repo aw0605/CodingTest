@@ -1,12 +1,10 @@
 def solution(number, k):
-    answer = []
-    
-    for n in number:
-        while k > 0 and answer and answer[-1] < n:
-            answer.pop()
+    i = 0
+    while i < len(number) - 1 and k > 0:
+        if number[i] < number[i+1]: 
+            number = number[:i] + number[i+1:]
+            if i != 0: i -= 1
             k -= 1
-        answer.append(n)
-    
-    if k != 0: answer = answer[:-k]
-    
-    return ''.join(answer)
+        else: i += 1
+    if k > 0: return number[:-k]
+    return number
