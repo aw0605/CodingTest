@@ -1,22 +1,15 @@
 def solution(sequence, k):
-    answer = None
-    start, end = 0, 0
-    arr = [sequence[0]]
-    for i in range(1, len(sequence)):
-        num = sequence[i] + arr[-1]
-        arr.append(num)
+    dic = {i:v for i,v in enumerate(sequence)}
+    answer = []
+    start, sum = 0,0
 
-    while start <= end and end < len(sequence):
-        s = arr[start]
-        e = arr[end]
-        val = e - s + sequence[start]
+    for i,v in enumerate(sequence):
+        end = i
+        sum += v
+        while sum > k :
+            sum -= dic[start]
+            start += 1
+        if sum == k: answer.append([start,end])
 
-        if val == k:
-            if answer is None: answer = [start, end]
-            else:
-                if (answer[1] - answer[0]) > (end - start): answer = [start, end]
-
-        if val > k: start += 1
-        else: end += 1
-
-    return answer
+    answer.sort(key = lambda x: (x[1]-x[0],x[0]))
+    return answer[0]
