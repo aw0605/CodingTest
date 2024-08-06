@@ -1,9 +1,15 @@
 def solution(storey):
     answer = 0
-    while storey:
-        storey, moves = divmod(storey, 10)
-        if moves > 5 or (moves == 5 and storey % 10 >= 5):
-            moves = 10 - moves
-            storey += 1
-        answer += moves
+    x = list(map(int, str(storey)[::-1]))
+
+    for i in range(len(x)):
+        if x[i] < 5: answer += x[i]
+        elif x[i] == 5:
+            answer += 5
+            if i+1 < len(x) and x[i+1] >= 5: x[i+1] += 1 
+        else: 
+            answer += 10 - x[i]
+            if i+1 < len(x): x[i+1] += 1
+            else: answer += 1
+
     return answer
