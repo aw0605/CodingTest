@@ -1,17 +1,14 @@
+from itertools import combinations
+from collections import Counter
+
 def solution(weights):
     answer = 0
-    dic = {}
-    friend_list = [2,3/2,4/3]
+    weights = Counter(weights)
     
-    for weight in weights:
-        if weight in dic: dic[weight] += 1
-        else: dic[weight] = 1
+    for a, b in combinations(weights.keys(), 2):
+        if a*2 == b*3 or a*2 == b*4 or a*3 == b*4 or b*2 == a*3 or b*2 == a*4 or b*3 == a*4: answer += weights[a] * weights[b]
 
-    for weight in dic:
-        if dic[weight]>1:
-            answer += dic[weight] * (dic[weight]-1)/2
-        for friend in friend_list:
-            if weight * friend in dic:
-                answer += dic[weight] * dic[weight*friend]
+    for v in weights.values():
+        if v > 1: answer += v * (v-1) / 2
 
     return answer
