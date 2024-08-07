@@ -1,15 +1,14 @@
 function solution(weights) {
-    let answer = 0;
-    const dict = {};
-    
-    for (let w of weights) dict[w] = (dict[w] || 0) + 1;
+  weights.sort((a, b) => b - a);
+  const dict = {};
 
-    for (let w in dict) {
-        answer += dict[w] * (dict[w] - 1) / 2;
-        answer += dict[w] * (dict[w * 4 / 3] || 0); 
-        answer += dict[w] * (dict[w * 4 / 2] || 0);
-        answer += dict[w] * (dict[w * 3 / 2] || 0);
-    }
-    
+  return weights.reduce((answer, w) => {
+    if (dict[w]) answer += dict[w];
+    if (dict[(w * 4) / 3]) answer += dict[(w * 4) / 3];
+    if (dict[(w * 3) / 2]) answer += dict[(w * 3) / 2];
+    if (dict[w * 2]) answer += dict[w * 2];
+
+    dict[w] = (dict[w] || 0) + 1;
     return answer;
+  }, 0);
 }
