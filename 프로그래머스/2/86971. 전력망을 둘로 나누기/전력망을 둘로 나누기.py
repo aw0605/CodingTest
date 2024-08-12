@@ -1,34 +1,28 @@
-from collections import deque
+uf = []
+
+def find(a):
+    global uf
+    if uf[a] < 0: return a
+    uf[a] = find(uf[a])
+    return uf[a]
+
+def merge(a, b):
+    global uf
+    pa = find(a)
+    pb = find(b)
+    if pa == pb: return
+    uf[pa] += uf[pb]
+    uf[pb] = pa
 
 def solution(n, wires):
-    answer = n
-    graph = [[] for _ in range(n+1)]
+    global uf
+    answer = int(1e9)
+    k = len(wires)
+    for i in range(k):
+        uf = [-1 for _ in range(n+1)]
+        tmp = [wires[x] for x in range(k) if x != i]
+        for a, b in tmp: merge(a, b)
+        v = [x for x in uf[1:] if x < 0]
+        answer = min(answer, abs(v[0]-v[1]))
 
-    for a,b in wires:
-        graph[a].append(b)
-        graph[b].append(a)
-    
-    def bfs(start):
-        visited = [0] * (n+1)
-        q = deque([start])
-        visited[start] = 1
-        cnt = 1
-        while q:
-            s = q.popleft()
-            for i in graph[s]:
-                if not visited[i]:
-                    q.append(i)
-                    visited[i] = 1
-                    cnt += 1
-        return cnt
-            
-    for a,b in wires:
-        graph[a].remove(b)
-        graph[b].remove(a)
-        
-        answer = min(abs(bfs(a) - bfs(b)), answer)
-        
-        graph[a].append(b)
-        graph[b].append(a)
-    
     return answer
