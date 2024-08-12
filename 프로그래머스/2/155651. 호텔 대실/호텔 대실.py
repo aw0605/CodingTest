@@ -1,19 +1,18 @@
+from heapq import heappop, heappush
+
 def solution(book_time):
-    bookings = [(int(start[:2]) * 60 + int(start[3:]), 
-                 int(end[:2]) * 60 + int(end[3:]) + 10) 
-                for start, end in book_time]
+    answer = 1
+
+    bookings = [(int(s[:2]) * 60 + int(s[3:]), int(e[:2]) * 60 + int(e[3:])+10) for s, e in book_time]
     bookings.sort()
     
-    rooms = []
+    heap = []
+    for s, e in bookings:
+        if not heap:
+            heappush(heap,e)
+            continue
+        if heap[0] <= s: heappop(heap)
+        else: answer += 1
+        heappush(heap,e)
     
-    for start, end in bookings:
-        room_found = False
-        for i in range(len(rooms)):
-            if rooms[i] <= start:
-                rooms[i] = end
-                room_found = True
-                break
-        
-        if not room_found: rooms.append(end)
-    
-    return len(rooms)
+    return answer
