@@ -1,17 +1,14 @@
 function solution(arrayA, arrayB) {
-  const gcd = (a, b) => (a % b === 0 ? b : gcd(b, a % b))
+    const aResult = getAnswer(arrayA, arrayB)
+    const bResult = getAnswer(arrayB, arrayA)
 
-  let resultA = arrayA[0]
-  let resultB = arrayB[0]
+    return aResult > bResult ? aResult : bResult
+}
 
-  arrayA.forEach((el) => resultA = gcd(resultA, el))
-  arrayB.forEach((el) => resultB = gcd(resultB, el))
-
-  let chkA = true
-  let chkB = true
-
-  arrayA.forEach((el) => {if (el % resultB === 0) chkA = false})
-  arrayB.forEach((el) => {if (el % resultA === 0) chkB = false})
-
-  return chkA && chkB ? (resultA > resultB ? resultA : resultB) : chkA ? resultB : chkB ? resultA : 0
+function getAnswer (A, B) {
+    A.sort((a, b) => a - b)
+    for (let i = A[0]; i > 1; i--) {
+        if (A.every(a => a % i === 0) && !B.some(b => b % i === 0)) return i
+    }
+    return 0
 }
