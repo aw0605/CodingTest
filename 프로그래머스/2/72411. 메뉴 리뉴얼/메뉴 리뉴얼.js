@@ -1,31 +1,35 @@
 function solution(orders, course) {
-  const ordered = {};
-  const candidates = {};
-  const maxNum = Array(10 + 1).fill(0);
-    
-  const createSet = (arr, start, len, foods) => {
-    if (len === 0) {
-      ordered[foods] = (ordered[foods] || 0) + 1;
-      if (ordered[foods] > 1) candidates[foods] = ordered[foods];
-      maxNum[foods.length] = Math.max(maxNum[foods.length], ordered[foods]);
-      return;
+    const answer = [];
+    for(let i=0; i<course.length; i++) {
+        const map = {};
+        let max = 0;
+        orders.forEach(v=>{
+            Combinations(v.split(""), course[i]).forEach(x=>{
+                if (!map[x]) map[x] = 1;
+                else map[x]++;
+            });
+            for (const k in map) {
+                if (map[k] > max) max = map[k];
+            }
+        });
+        for (const k in map) {
+            if (map[k] === max && max > 1) answer.push(k);
+        }
     }
 
-    for (let i = start; i < arr.length; i++) {
-      createSet(arr, i + 1, len - 1, foods + arr[i]);
-    }
-  };
+    return answer.sort();
+}
+const Combinations = (arr, num) => {
+    const results = [];
 
-  orders.forEach((od) => {
-    const sorted = od.split('').sort();
-    course.forEach((len) => {
-      createSet(sorted, 0, len, '');
+    if (num === 1) return arr.map(v => [v]);
+
+    arr.forEach((select, i, origin) => {
+        const remainder = origin.slice(i + 1);
+        const combinations = Combinations(remainder, num - 1);
+        const combine = combinations.map(v => [select, ...v].sort().join(""));
+        results.push(...combine);
     });
-  });
 
-  const launched = Object.keys(candidates).filter(
-    (food) => maxNum[food.length] === candidates[food]
-  );
-
-  return launched.sort();
+    return results;
 }
