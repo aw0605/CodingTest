@@ -1,15 +1,11 @@
+from collections import defaultdict
 from itertools import combinations
-from collections import Counter
 
 def solution(orders, course):
-    answer = []
-    for c in course:
-        temp = []
-        for order in orders:
-            combi = combinations(sorted(order), c)
-            temp += combi
-        counter = Counter(temp)
-        if len(counter) != 0 and max(counter.values()) != 1:
-            answer += [''.join(f) for f in counter if counter[f] == max(counter.values())]
-
-    return sorted(answer)
+    d, m = defaultdict(int), defaultdict(lambda: 2)
+    for order in orders:
+        for n in [n for n in course if n <= len(order)]:
+            for v in combinations(sorted(order), n):
+                d[v], m[n] = d[v] + 1, d[v] + 1 if d[v] >= m[n] else m[n]
+                
+    return sorted(["".join(v) for v, c in d.items() if c == m[len(v)]])
