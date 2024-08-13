@@ -1,22 +1,11 @@
-def GCD(x, y):
-    while y: 
-        x,y = y, x % y
-    return x
- 
-def notDiv(arr, gcd):
-    for n in arr:
-        if n % gcd == 0: return False
-    return True
+from functools import reduce
+from math import gcd
 
-def solution(arrayA, arrayB):
-    answer = 0
-    gcdA = arrayA[0]
-    gcdB = arrayB[0]
+def solution(nums1, nums2):
+    gcd1, gcd2 = reduce(gcd, nums1), reduce(gcd, nums2)
+    answer = []
     
-    for a in arrayA[1:]: gcdA = GCD(a, gcdA)
-    for b in arrayB[1:]:gcdB = GCD(b, gcdB)
-        
-    if notDiv(arrayA, gcdB): answer = max(answer, gcdB)
-    if notDiv(arrayB, gcdA):answer = max(answer, gcdA)
-        
-    return answer
+    if all(each % gcd2 for each in nums1): answer.append(gcd2)
+    if all(each % gcd1 for each in nums2): answer.append(gcd1)
+    
+    return max(answer) if answer else 0
