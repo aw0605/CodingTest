@@ -1,11 +1,12 @@
-from functools import reduce
 from math import gcd
 
-def solution(nums1, nums2):
-    gcd1, gcd2 = reduce(gcd, nums1), reduce(gcd, nums2)
-    answer = []
-    
-    if all(each % gcd2 for each in nums1): answer.append(gcd2)
-    if all(each % gcd1 for each in nums2): answer.append(gcd1)
-    
-    return max(answer) if answer else 0
+def check(arrA, arrB):
+    c1 = arrA[0]
+    for n in arrA:
+        if (c1:=gcd(c1, n)) == 1:return 0
+    for c in range(c1,1,-1):
+        if c1%c==0 and all(n%c for n in arrB): return c
+    return 0
+
+def solution(arrayA, arrayB):
+    return max(check(arrayB, arrayA), check(arrayA, arrayB))
