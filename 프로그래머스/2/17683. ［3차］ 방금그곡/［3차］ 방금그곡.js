@@ -1,30 +1,34 @@
-function change(s) {
-    return s.replace(/C#/g, 'c')
-            .replace(/D#/g, 'd')
-            .replace(/F#/g, 'f')
-            .replace(/G#/g, 'g')
-            .replace(/A#/g, 'a')
-            .replace(/B#/g, 'b');
-}
-
 function solution(m, musicinfos) {
-    let answer = [0, '(None)'];
-    m = change(m);
-    
-    for (const info of musicinfos) {
-        const [t1, t2, title, notes] = info.split(',');
-        
-        const startHour = parseInt(t1.slice(0, 2), 10);
-        const startMinute = parseInt(t1.slice(3), 10);
-        const endHour = parseInt(t2.slice(0, 2), 10);
-        const endMinute = parseInt(t2.slice(3), 10);
-        const time = (endHour - startHour) * 60 + (endMinute - startMinute);
-        
-        const partNotes = change(notes);
-        const fullNotes = partNotes.repeat(Math.floor(time / partNotes.length)) + partNotes.slice(0, time % partNotes.length);
-        
-        if (fullNotes.includes(m) && time > answer[0]) answer = [time, title];
+    const getMinutes = s => s.substr(0, 2) * 60 + +s.substr(3);
+
+    m = m.replace(/\w#/g, a => a[0].toLowerCase());
+
+    let answer = musicinfos
+        .map(info => {
+            info = info.split(',');
+
+            let playMinutes = getMinutes(info[1]) - getMinutes(info[0]),
+                melody = info[3].replace(/\w#/g, a => a[0].toLowerCase());
+
+            melody = playMinutes > melody.length
+                ? melody.padEnd(playMinutes, melody)
+                : melody.substr(0, playMinutes);
+
+            return {playMinutes: playMinutes, melody: melody, name: info[2], startTime: getMinutes(info[0])};
+        })
+        .filter(info => new RegExp(m).test(info.melody));
+
+    if (answer.length) {
+        if (answer.length > 1) {
+            answer = answer.filter(v => v.playMinutes >= Math.max(...answer.map(val => val.playMinutes)));
+
+            if (answer.length > 1) {
+                answer = answer.filter(v => v.startTime <= Math.min(...answer.map(val => val.startTime)));
+            }
+        }
+
+        return answer[0].name;
     }
-    
-    return answer[1];
+
+    return "(None)";
 }
