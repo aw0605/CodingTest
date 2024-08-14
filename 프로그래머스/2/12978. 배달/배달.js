@@ -1,25 +1,25 @@
-function solution(N, road, K) {
-   const totalDist = new Array(N+1).fill(Infinity)
-   const  adj = Array.from({length: N+1}, () => [])
+const solution = (N, road, K) => {
+  const graph = [...Array(N + 1)].map((m) => []);
+  road.forEach((r) => {
+    graph[r[0]].push([r[1], r[2]]);
+    graph[r[1]].push([r[0], r[2]]);
+  });
 
-   road.forEach(([a,b,c]) => {
-       adj[a].push({to: b, dist: c})
-       adj[b].push({to: a, dist: c})
-   })
+  const weight = new Array(graph.length).fill(Infinity);
 
-   const queue = [{to: 1, dist: 0}]
-   totalDist[1] = 0
-
-    while(queue.length) {
-        let {to, dist} = queue.pop()
-
-        adj[to].forEach((step) => {
-            if (totalDist[step.to] > totalDist[to] + step.dist) {
-                totalDist[step.to] = totalDist[to] + step.dist
-                queue.push(step)
-            }
-        })
+  const dfs = function (start, w) {
+    if (weight[start] < w) {
+      return;
+    } else {
+      weight[start] = w;
+      for (let item of graph[start]) {
+        const [a, b] = item;
+        dfs(a, w + b);
+      }
     }
+  };
 
-    return totalDist.filter((dist) => dist <= K).length
-}
+  dfs(1, 0);
+
+  return weight.filter((w) => w <= K).length;
+};
