@@ -1,22 +1,17 @@
-import sys
 def solution(N, road, K):
-    visited, D, r = [False]*(N+1), [sys.maxsize]*(N+1), [[(None, None)]] + [[] for _ in range(N)]
+    visited = [False] * (N + 1)
+    costs = [float('inf')] * (N + 1)
+    costs[1] = 0
+    parents = [1]
     
-    for e in road:
-        r[e[0]].append((e[1],e[2]))
-        r[e[1]].append((e[0],e[2]))
-    D[1] = 0
-    
-    for _ in range(1,N+1): 
-        min_ = sys.maxsize
-        for i in range(1,N+1): 
-            if not visited[i] and D[i] < min_:
-                min_ = D[i]
-                m = i
-                
-        visited[m] = True
-        
-        for w, wt in r[m]:
-            if D[m] + wt < D[w]: D[w] = D[m] + wt
+    while (parents):
+        parent = parents.pop(0)
+        visited[parent] = True
+        for a, b, cost in road:
+            if (a == parent or b == parent):
+                target = b if a == parent else a
+                if costs[target] > costs[parent] + cost:
+                    costs[target] = costs[parent] + cost
+                    parents.append(target)
 
-    return len([d for d in D if d <= K])
+    return sum(1 for c in costs if c <= K)
