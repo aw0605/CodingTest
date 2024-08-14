@@ -1,25 +1,22 @@
-import heapq
-
-def search(dist,arr):
-    heap = []
-    heapq.heappush(heap, [0,1])
-    while heap:
-        cost, node = heapq.heappop(heap)
-        for c,n in arr[node]:
-            if cost+c < dist[n]:
-                dist[n] = cost+c
-                heapq.heappush(heap, [cost+c,n])
-
-
+import sys
 def solution(N, road, K):
-    dist = [float('inf')]*(N+1)
-    dist[1] = 0
-    arr = [[] for _ in range(N+1)]
+    visited, D, r = [False]*(N+1), [sys.maxsize]*(N+1), [[(None, None)]] + [[] for _ in range(N)]
     
-    for r in road:
-        arr[r[0]].append([r[2],r[1]])
-        arr[r[1]].append([r[2],r[0]])
+    for e in road:
+        r[e[0]].append((e[1],e[2]))
+        r[e[1]].append((e[0],e[2]))
+    D[1] = 0
+    
+    for _ in range(1,N+1): 
+        min_ = sys.maxsize
+        for i in range(1,N+1): 
+            if not visited[i] and D[i] < min_:
+                min_ = D[i]
+                m = i
+                
+        visited[m] = True
+        
+        for w, wt in r[m]:
+            if D[m] + wt < D[w]: D[w] = D[m] + wt
 
-    search(dist,arr)
-
-    return len([i for i in dist if i <= K])
+    return len([d for d in D if d <= K])
