@@ -1,30 +1,25 @@
-function search(dist, arr) {
-    const heap = [];
-    heap.push([0, 1]);
-    while (heap.length > 0) {
-        heap.sort((a, b) => a[0] - b[0]);
-        const [cost, node] = heap.shift();
-        
-        for (const [c, n] of arr[node]) {
-            if (cost + c < dist[n]) {
-                dist[n] = cost + c;
-                heap.push([cost + c, n]);
-            }
-        }
-    }
-}
-
 function solution(N, road, K) {
-    const dist = Array(N + 1).fill(Infinity);
-    dist[1] = 0;
-    const arr = Array.from({ length: N + 1 }, () => []);
+   const totalDist = new Array(N+1).fill(Infinity)
+   const  adj = Array.from({length: N+1}, () => [])
 
-    for (const [u, v, w] of road) {
-        arr[u].push([w, v]);
-        arr[v].push([w, u]);
+   road.forEach(([a,b,c]) => {
+       adj[a].push({to: b, dist: c})
+       adj[b].push({to: a, dist: c})
+   })
+
+   const queue = [{to: 1, dist: 0}]
+   totalDist[1] = 0
+
+    while(queue.length) {
+        let {to, dist} = queue.pop()
+
+        adj[to].forEach((step) => {
+            if (totalDist[step.to] > totalDist[to] + step.dist) {
+                totalDist[step.to] = totalDist[to] + step.dist
+                queue.push(step)
+            }
+        })
     }
-    
-    search(dist, arr);
 
-    return dist.filter(d => d <= K).length;
+    return totalDist.filter((dist) => dist <= K).length
 }
