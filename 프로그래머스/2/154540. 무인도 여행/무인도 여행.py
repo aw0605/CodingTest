@@ -1,28 +1,29 @@
-from collections import deque
+import sys
+    
 def solution(maps):
-    N, M = len(maps), len(maps[0])
-    visited = [[0]*M for _ in range(N)]
+    sys.setrecursionlimit(int(1e9))
 
-    answer = []
-    for i in range(N):
-        for j in range(M):
-            if maps[i][j]=='X' or visited[i][j]:
-                continue
-            queue = deque()
-            queue.append((i,j))
-            visited[i][j]=1
-            n_food = int(maps[i][j])
-            while queue:
-                i0, j0 = queue.popleft()
-                for di, dj in [(1,0), (0,1), (-1,0), (0,-1)]:
-                    ni, nj = i0+di, j0+dj
-                    if 0<=ni<N and 0<=nj<M and not visited[ni][nj] and maps[ni][nj]!='X':
-                        queue.append((ni,nj))
-                        visited[ni][nj] = 1
-                        n_food += int(maps[ni][nj])
-            answer.append(n_food)
-    if not answer:
-        answer.append(-1)
-    else:
-        answer.sort()
-    return answer
+    graph = [list(row) for row in maps]
+    dx, dy = [1,-1,0,0], [0,0,1,-1]
+    ans = []
+
+    def dfs(x, y):
+        cnt = 0
+        if x < 0 or x >= len(graph) or y < 0 or y >= len(graph[0]):
+            return cnt
+        if not graph[x][y].isdigit():
+            return cnt
+        cnt = int(graph[x][y])
+        graph[x][y] = 'X'
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            cnt += dfs(nx, ny)
+        return cnt
+
+    for i in range(len(graph)):
+        for j in range(len(graph[0])):
+            if graph[i][j].isdigit():
+                ans.append(dfs(i,j))
+
+    return sorted(ans) if len(ans) != 0 else [-1]
