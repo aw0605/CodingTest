@@ -1,29 +1,31 @@
 function solution(rows, columns, queries) {
-    const map = [...new Array(rows)].map((_,i) => [...new Array(columns)].map((_,j)=>columns*i+j+1))
-    
-    const rotate = (query, map) => {
-        const [sY,sX,eY,eX] = query.map(v => v-1)
-        const rotateList = []
-        const tmp = map[sY][sX]
-        let ret = tmp
-        
-        for (let y = sY; y <= eY; y++) rotateList.push([y,sX])
-        for (let x = sX; x < eX; x++) rotateList.push([eY,x])
-        for (let y = eY; y >= sY; y--) rotateList.push([y,eX])
-        for (let x = eX; x > sX; x--) rotateList.push([sY,x])
+    const a = [...Array(rows)].map((_, r)=>[...Array(columns)].map((_, c)=>r*columns+c+1));
+    const mins = [];
 
-        for (let i = 0 ; i < rotateList.length-1; i++) {
-            const [y,x] = rotateList[i]
-            const [nY,nX] = rotateList[i+1]
-            map[y][x] = map[nY][nX]
-            ret = Math.min(map[y][x],ret)
+    queries.map(query => {
+        const [x1, y1, x2, y2] = query.map(_=>_-1);
+        let min = a[x1][y1], tmp = a[x1][y1];
+
+        for(let i=x1;i<x2;i++) {
+            a[i][y1] = a[i+1][y1];
+            min = Math.min(min, a[i][y1]);
         }
-        if (rotateList.length){
-            const [y,x] = rotateList[rotateList.length-1]
-            map[y][x] = tmp
+        for(let i=y1;i<y2;i++) {
+            a[x2][i] = a[x2][i+1];
+            min = Math.min(min, a[x2][i]);
         }
-        return ret
-    }
-    
-    return queries.map(query => rotate(query,map))
+        for(let i=x2;i>x1;i--) {
+            a[i][y2] = a[i-1][y2];
+            min = Math.min(min, a[i][y2]);
+        }
+        for(let i=y2;i>y1;i--) {
+            a[x1][i] = a[x1][i-1];
+            min = Math.min(min, a[x1][i]);
+        }
+        a[x1][y1+1] = tmp;
+
+        mins.push(min);
+    })
+
+    return mins;
 }
