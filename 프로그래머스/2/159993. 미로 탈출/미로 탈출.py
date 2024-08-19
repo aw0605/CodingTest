@@ -1,39 +1,34 @@
 from collections import deque
 
-def bfs(start, end, maps):
-    dy = [0, 1, -1, 0]
-    dx = [1, 0, 0, -1]
-    
-    n = len(maps)
-    m = len(maps[0])
-    visited = [[False]*m for _ in range(n)]
-    que = deque()
-    flag = False
-    
-    for i in range(n):
-        for j in range(m):
-            if maps[i][j] == start:      
-                que.append((i, j, 0))    
-                visited[i][j] = True
-                flag = True; break 
-        if flag: break
-                
-    while que:
-        y, x, cost = que.popleft()
-        if maps[y][x] == end: return cost
-        
-        for i in range(4):
-            ny = y + dy[i]
-            nx = x + dx[i]
-            if 0<= ny <n and 0<= nx <m and maps[ny][nx] !='X':
-                if not visited[ny][nx]:
-                    que.append((ny, nx, cost+1))
-                    visited[ny][nx] = True       
-    return -1
-        
-            
-def solution(maps):
-    path1 = bfs('S', 'L', maps)
-    path2 = bfs('L', 'E', maps)
+def fast_way_bfs(maps, start, end):
+    visited = [[0] * 1000 for _ in range(1000)]
+    drs, dcs = [0, 0, 1, -1], [1, -1, 0, 0]
+    queue = deque()
+    queue.append(start)
 
-    return path1+path2 if path1 != -1 and path2 != -1 else -1
+    distance = 0
+    while len(queue):
+        r, c, dist = queue.popleft()
+        if not(0 <= r < len(maps)) or not(0 <= c < len(maps[0])): continue
+        if maps[r][c] == 'X' or visited[r][c] == True: continue 
+        if maps[r][c] == maps[end[0]][end[1]]: return dist
+
+        visited[r][c] = True
+
+        for dr, dc in zip(drs, dcs):
+            if 0 <= r+dr < len(maps) and 0 <= c+dc < len(maps[0]):
+                if maps[r+dr][c+dc] != 'X' and visited[r+dr][c+dc] == False:
+                    queue.append((r+dr, c+dc, dist+1))
+    return -1
+
+def solution(maps):
+    start, lever, end = 0, 0, 0
+    for r in range(len(maps)):
+        for c in range(len(maps[0])):
+            if maps[r][c] == 'S': start = r, c, 0
+            if maps[r][c] == 'E': end = r, c, 0
+            if maps[r][c] == 'L': lever = r, c, 0
+            
+    first, second = fast_way_bfs(maps, start, lever), fast_way_bfs(maps, lever, end)
+    
+    return -1 if -1 in [first, second] else first + second
