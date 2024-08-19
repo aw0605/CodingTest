@@ -1,46 +1,49 @@
-function BFS(start, arr, target){
-  let time = 0;
-  const dx  = [-1,1,0,0];
-  const dy = [0,0,-1,1];
-  arr[start[0]][start[1]] = "X";
-  let queue = [start];
+function solution(maps) {
+  let start = [];
+  let lever = [];
+  let exit = [];
+  const table = maps.map((r) => r.split(""));
+  const rLen = table.length;
+  const cLen = table[0].length;
 
-  while (queue.length > 0){
-    let size = queue.length;
-    for (let i = 0; i < size; i++){
-      let [x,y] = queue.shift();
-      for (var k = 0; k < 4; k++){
-        let nx = x + dx[k];
-        let ny = y + dy[k];
-        if(nx>=0 && ny>=0 && nx<arr.length && ny<arr[0].length && arr[nx][ny]!=="X"){
-          if (target === arr[nx][ny]) return time+1;
+  table.forEach((row, x) => {
+    row.forEach((cel, y) => {
+      if (cel === "S") start = [x, y];
+      else if (cel === "L") lever = [x, y];
+      else if (cel == "E") exit = [x, y];
+    });
+  });
 
-          queue.push([nx,ny]);
-          arr[nx][ny] = 'X';
-        }
+  const move = ([x1, y1], [x2, y2]) => {
+    const dp = new Array(rLen).fill(null).map(() => new Array(cLen).fill(Infinity));
+    const visited = new Array(rLen).fill(null).map(() => new Array(cLen).fill(false));
+
+    dp[x1][y1] = 0;
+    const queue = [[x1, y1]];
+
+    while (queue.length) {
+      const [px, py] = queue.shift();
+      if (visited[px][py]) continue;
+      visited[px][py] = true;
+      const nexts = [
+        [px - 1, py],
+        [px + 1, py],
+        [px, py - 1],
+        [px, py + 1],
+      ];
+        
+      for (const [nx, ny] of nexts) {
+        if (nx < 0 || nx >= rLen || ny < 0 || ny >= cLen || table[nx][ny] === "X") continue;
+        dp[nx][ny] = Math.min(dp[nx][ny], dp[px][py] + 1);
+        if (visited[nx][ny]) continue;
+        queue.push([nx, ny, dp[nx][ny]]);
       }
     }
-    time++;
-  }
-
-  return -1;
-}
-
-function solution(maps) {
-  let lCord;
-  let sCord;
-  let maps1 = maps.map((v) => v.split(""));
-  let maps2 = maps.map((v) => v.split(""));
+    return dp[x2][y2] === Infinity ? -1 : dp[x2][y2];
+  };
     
-  for (var x = 0; x < maps.length; x++){
-    for (var y = 0; y < maps[0].length; y++){
-      if (maps[x][y] === "L") lCord = [x,y];
-      if(maps[x][y] === "S") sCord = [x,y];
-    }
-  }
+  const first = move(start, lever);
+  const second = move(lever, exit);
 
-  let a = BFS(sCord, [...maps1], "L");
-  let b = BFS(lCord, [...maps2], "E")
-
-  return (a === -1 || b === -1) ? -1 : a+b;
+  return (first === -1 || second === -1) ? -1 : first + second;
 }
