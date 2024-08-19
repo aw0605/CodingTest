@@ -1,33 +1,10 @@
-def check(s):
-    stack = []
-
-    for i in s:
-        if i == '(': stack.append(i)
-        else:
-            if len(stack) == 0: return False
-            stack.pop()
-    return True
-
-def divide(s):
-    left, right = 0,0
-    for i in range(len(s)):
-        if s[i] == '(': left += 1
-        else: right += 1
-        if left == right: return s[:i+1], s[i+1:]
-
 def solution(p):
-    if not p: return ''
-
-    u, v = divide(p)
-
-    if check(u): return u + solution(v)
-    else:
-        answer = '('
-        answer += solution(v)
-        answer += ')'
-
-        for s in u[1:len(u)-1]:
-            if s == '(': answer += ')'
-            else: answer += '('
-            
-        return answer
+    if p=='': return p
+    r = True; c=0
+    for i in range(len(p)):
+        if p[i] == '(': c-=1
+        else: c += 1
+        if c > 0: r = False
+        if c == 0:
+            if r: return p[:i+1] + solution(p[i+1:])
+            else: return '(' + solution(p[i+1:]) + ')' + ''.join(list(map(lambda x:'(' if x==')' else ')', p[1:i])))
