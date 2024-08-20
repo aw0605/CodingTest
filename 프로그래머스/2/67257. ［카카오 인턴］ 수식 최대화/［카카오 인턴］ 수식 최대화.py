@@ -1,19 +1,42 @@
-import re
-from itertools import permutations
+import itertools
+import copy
 
 def solution(expression):
-    op = [x for x in ['*','+','-'] if x in expression]
-    op = [list(y) for y in permutations(op)]
-    ex = re.split(r'(\D)',expression)
+    operatorAll = ['*','+','-']
+    operator = []
+    largeResult = -1
+    for i in operatorAll :
+        if i in expression :
+            operator.append(i)
+    p = list(itertools.permutations(operator, len(operator)))
+    sperator = []
+    nums = '0123456789'
+    num = ''
+    for i in range(len(expression)) :
+        if expression[i] in nums :
+            num += expression[i]
+        else :
+            sperator.append(num)
+            sperator.append(expression[i])
+            num = ''
+    if num != '' :
+        sperator.append(num)
 
-    a = []
-    for x in op:
-        _ex = ex[:]
-        for y in x:
-            while y in _ex:
-                tmp = _ex.index(y)
-                _ex[tmp-1] = str(eval(_ex[tmp-1]+_ex[tmp]+_ex[tmp+1]))
-                _ex = _ex[:tmp]+_ex[tmp+2:]
-        a.append(_ex[-1])
+    for i in p :
+        temp_sperator = copy.deepcopy(sperator)
+        for j in i :
+            while j in temp_sperator :
+                idx = temp_sperator.index(j)
+                if j == '*' :
+                    temp_sperator[idx-1] = str(int(temp_sperator[idx-1])*int(temp_sperator[idx+1]))
+                elif j == '+' :
+                    temp_sperator[idx-1] = str(int(temp_sperator[idx-1])+int(temp_sperator[idx+1]))
+                else :
+                    temp_sperator[idx-1] = str(int(temp_sperator[idx-1])-int(temp_sperator[idx+1]))
 
-    return max(abs(int(x)) for x in a)
+                del temp_sperator[idx]
+                del temp_sperator[idx]
+        if largeResult < abs(int(temp_sperator[0])) :
+            largeResult = abs(int(temp_sperator[0]))
+
+    return largeResult
