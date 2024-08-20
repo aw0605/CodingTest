@@ -1,30 +1,51 @@
 function solution(expression) {
-    const splitted = expression.split(/([\*\+-])/g);
+    let operatorsList = [
+        ['*', '+', '-'],
+        ['*', '-', '+'],
+        ['+', '*', '-'],
+        ['+', '-', '*'],
+        ['-', '*', '+'],
+        ['-', '+', '*'],
+    ]
 
-    const solve = (precedence, left = 0, right = splitted.length) => {
-        if (left + 1 === right) return eval(splitted[left]);
+    let maxResult = 0
 
-        for (const operator of precedence) {
-            for (let i = right - 2;i > left;i -= 2) {
-                if (splitted[i] === operator) {
-                    return eval(`${solve(precedence, left, i)}${operator}${solve(precedence, i + 1, right)}`);
+    for (let operators of operatorsList) {
+        const travel = (expression = '', operators = []) => {
+            if (operators.length === 0) return expression
+
+            const slicedOperators= operators.slice()
+            const operator = slicedOperators.shift()
+            const operands = expression.split(operator)
+
+            if (operands.length === 0) return expression
+
+            let result = null
+
+            for (let operand of operands) {
+                let child = operator === '*' ? 1 : 0
+
+                if (operand !== '') child = travel(operand, slicedOperators.slice())       
+                if (child === '') child = operator === '*' ? 1 : 0
+                child = parseInt(child, 10)
+
+                if (result === null) {
+                    result = child
+                    continue
                 }
+
+                if (operator === '*') result *= child
+                else if (operator === '+') result += child
+                else if (operator === '-') result -= child
             }
+
+            return result
         }
 
-        return Number.POSITIVE_INIFINITY;
-    };
+        let result = Math.abs(travel(expression, operators))
 
-    return Math.max(
-        ...[
-            ['*', '+', '-'],
-            ['*', '-', '+'],
-            ['+', '*', '-'],
-            ['+', '-', '*'],
-            ['-', '*', '+'],
-            ['-', '+', '*']
-        ]
-        .map((precedence) => solve(precedence))
-        .map(Math.abs)
-    );
+        maxResult = Math.max(maxResult, result)
+    }
+
+    return maxResult
 }
