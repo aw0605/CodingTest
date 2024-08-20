@@ -1,31 +1,19 @@
+import re
 from itertools import permutations
-from collections import deque
 
 def solution(expression):
-    answer = 0
-    for priority in list(permutations(['+', '-', '*'], 3)):
-        answer = max(answer, abs(make_result(priority, expression)))
-    return answer
+    op = [x for x in ['*','+','-'] if x in expression]
+    op = [list(y) for y in permutations(op)]
+    ex = re.split(r'(\D)',expression)
 
+    a = []
+    for x in op:
+        _ex = ex[:]
+        for y in x:
+            while y in _ex:
+                tmp = _ex.index(y)
+                _ex[tmp-1] = str(eval(_ex[tmp-1]+_ex[tmp]+_ex[tmp+1]))
+                _ex = _ex[:tmp]+_ex[tmp+2:]
+        a.append(_ex[-1])
 
-def make_result(priority, expression):
-    arr = deque()
-    num = ''
-    for k in expression:
-        if k.isdigit(): num += k
-        else:
-            arr.append(num)
-            num = ''
-            arr.append(k)
-    arr.append(num)
-
-    for op in priority:
-        stack = []
-        while len(arr) != 0:
-            temp = arr.popleft()
-            if temp == op:
-                result = str(eval(stack.pop()+op+arr.popleft()))
-                stack.append(result)
-            else: stack.append(temp)
-        arr = deque(stack)
-    return int(arr.pop())
+    return max(abs(int(x)) for x in a)
