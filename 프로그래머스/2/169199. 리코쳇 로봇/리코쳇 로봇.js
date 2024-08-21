@@ -1,53 +1,61 @@
+const direction = [
+  [0, 1],
+  [1, 0],
+  [0, -1],
+  [-1, 0],
+];
+
+let n, m;
 function solution(board) {
-        const [row, col] = [board.length, board[0].length];
-        const dir = [[0, -1], [0, 1], [-1, 0], [1, 0]];
-        const visited = new Set();
-        let start = [0, 0];
-
-        for (let i = 0; i < row; i++) {
-          if(board[i].includes('R')) start = [i, board[i].indexOf('R')];
-        }
-
-        function bfs(start) {
-          const q = [[...start, 0]];
-
-          while (q.length) {
-            const [x, y, cnt] = q.shift();
-
-            for (let i = 0; i < dir.length; i++) {
-              let [nx, ny] = [x + dir[i][0], y + dir[i][1]];
-              if (nx < 0 || nx >= row || ny < 0 || ny >= col || board[nx][ny] === 'D') continue;
-
-              switch (i) {
-                case 0: // left
-                  while (ny >= 0 && board[nx][ny] !== 'D') ny--;
-                  ny++;
-                  break;
-                case 1: // right
-                  while (ny < col && board[nx][ny] !== 'D') ny++;
-                  ny--;
-                  break;
-                case 2: // top
-                  while (nx >= 0 && board[nx][ny] !== 'D') nx--;
-                  nx++;
-                  break;
-                case 3: // bottom
-                  while (nx < row && board[nx][ny] !== 'D') nx++;
-                  nx--;
-                  break;
-              }
-              if (board[nx][ny] === 'G') return cnt + 1;
-
-              let r1 = `${x}${y}${nx}${ny}`;
-              let r2 = `${nx}${ny}${x}${y}`;
-              if (!visited.has(r1) && !visited.has(r2)) {
-                visited.add(r1);
-                visited.add(r2);
-                q.push([nx, ny, cnt + 1]);
-              }
-            }
-          }
-        }
-
-        return bfs(start) ?? -1;
+  n = board.length;
+  m = board[0].length;
+  let sx, sy, ex, ey;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (board[i][j] === "R") {
+        sx = i;
+        sy = j;
       }
+      if (board[i][j] === "G") {
+        ex = i;
+        ey = j;
+      }
+    }
+  }
+
+  const discovered = Array.from(Array(n), () => Array(m).fill(false));
+  discovered[sx][sy] = true;
+  let queue = [[sx, sy, 0]];
+  while (queue.length !== 0) {
+    const size = queue.length;
+    let nextQueue = [];
+
+    for (let i = 0; i < size; i++) {
+      const [x, y, cnt] = queue.pop();
+
+      for (const [dx, dy] of direction) {
+        let nx = x + dx;
+        let ny = y + dy;
+        while (check(nx, ny) && board[nx][ny] !== "D") {
+          nx += dx;
+          ny += dy;
+        }
+        nx -= dx;
+        ny -= dy;
+        if (board[nx][ny] === "G") {
+          return cnt + 1;
+        }
+        if (!discovered[nx][ny]) {
+          discovered[nx][ny] = true;
+          nextQueue.push([nx, ny, cnt + 1]);
+        }
+      }
+    }
+    queue = nextQueue;
+  }
+  return -1;
+}
+
+const check = (nx, ny) => {
+  return 0 <= nx && nx < n && 0 <= ny && ny < m;
+};
