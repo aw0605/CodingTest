@@ -1,21 +1,11 @@
+function sort(a, b, col) {
+    return a[col - 1] - b[col - 1] || b[0] - a[0];
+}
+
 function solution(data, col, row_begin, row_end) {
-    data = data.sort((a, b) => {
-        if(a[col-1] === b[col-1]) return b[0] - a[0];
-        return a[col-1] - b[col-1];
-    });
-
-    const result = [];
-    for(let i=row_begin; i<=row_end; i++) {
-        const row = data[i-1];
-        const value = row.reduce((a, c) => {
-            return a + (c % i);
-        }, 0);
-
-        result.push(value);
-    }
-
-    return result.reduce((a, c) => {
-        if(a === null) return c;
-        return a^c;
-    }, null);
+    data.sort((a, b) => sort(a, b, col));
+    return data
+        .map((row, i) => row.reduce((acc, col) => acc + (col % (i + 1)), 0))
+        .slice(row_begin - 1, row_end)
+        .reduce((acc, val) => acc ^ val, 0);
 }
