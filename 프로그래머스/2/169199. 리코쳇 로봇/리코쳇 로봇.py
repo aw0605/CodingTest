@@ -1,26 +1,23 @@
 def solution(board):
-    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-
-    robot_pos = None
-    target_pos = None
-    for i in range(len(board)):
-        for j in range(len(board[0])):
-            if board[i][j] == 'R': robot_pos = (i, j)
-            elif board[i][j] == 'G': target_pos = (i, j)
-
-    queue = [(robot_pos, 0)]
+    que = []
+    for x, row in enumerate(board):
+        for y, each in enumerate(row):
+            if board[x][y] == 'R': que.append((x, y, 0))
+            
     visited = set()
-    visited.add(robot_pos)
-    while queue:
-        curr_pos, move_count = queue.pop(0)
-        if curr_pos == target_pos: return move_count
-        for dx, dy in directions:
-            x, y = curr_pos
-            while 0 <= x+dx < len(board) and 0 <= y+dy < len(board[0]) and board[x+dx][y+dy] != 'D':
-                x += dx
-                y += dy
-            if (x, y) not in visited:
-                visited.add((x, y))
-                queue.append(((x, y), move_count + 1))
-
-    return -1 
+    
+    while que:
+        x, y, length = que.pop(0)
+        if (x, y) in visited: continue
+        if board[x][y] == 'G': return length
+        visited.add((x, y))
+        for diff_x, diff_y in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            now_x, now_y = x, y
+            while True:
+                next_x, next_y = now_x + diff_x, now_y + diff_y
+                if 0 <= next_x < len(board) and 0 <= next_y < len(board[0]) and board[next_x][next_y] != 'D':
+                    now_x, now_y = next_x, next_y
+                    continue
+                que.append((now_x, now_y, length + 1))
+                break
+    return -1
