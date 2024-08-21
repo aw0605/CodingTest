@@ -1,10 +1,10 @@
 # [level 2] 테이블 해시 함수 - 147354 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/147354?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/147354?language=javascript) 
 
 ### 성능 요약
 
-메모리: 64.4 MB, 시간: 105.90 ms
+메모리: 88.5 MB, 시간: 13.79 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 08월 21일 15:34:08
+2024년 08월 21일 15:34:58
 
 ### 문제 설명
 
