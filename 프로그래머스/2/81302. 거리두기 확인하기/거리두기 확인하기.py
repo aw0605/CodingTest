@@ -1,20 +1,14 @@
-import numpy as np
-
-def isvalid(p):
-    q = []
-    p = np.array([list(x) for x in p])
-    for y, x in zip(*np.where(p == 'P')): q.append((y, x, y, x, 0))
-
-    while q:
-        y, x, sy, sx, d = q.pop(0)
-
-        if d < 2:
-            for ny, nx in [(y-1, x), (y, x+1), (y+1, x), (y, x-1)]:
-                if -1 < ny < 5 and -1 < nx < 5 and (ny, nx) != (sy, sx):
-                    if p[ny, nx] == 'P': return 0
-                    elif p[ny, nx] == 'O': q.append((ny, nx, sy, sx, d+1))
-
+def check(place):
+    for irow, row in enumerate(place):
+        for icol, cell in enumerate(row):
+            if cell != 'P': continue
+            if irow != 4 and place[irow + 1][icol] == 'P': return 0
+            if icol != 4 and place[irow][icol + 1] == 'P': return 0
+            if irow < 3 and place[irow + 2][icol] == 'P' and place[irow + 1][icol] != 'X': return 0
+            if icol < 3 and place[irow][icol + 2] == 'P' and place[irow][icol + 1] != 'X': return 0
+            if irow != 4 and icol != 4 and place[irow + 1][icol + 1] == 'P' and (place[irow + 1][icol] != 'X' or place[irow][icol + 1] != 'X'): return 0
+            if irow != 4 and icol != 0 and place[irow + 1][icol - 1] == 'P' and (place[irow + 1][icol] != 'X' or place[irow][icol - 1] != 'X'): return 0
     return 1
 
 def solution(places):
-    return [isvalid(p) for p in places]
+    return [check(place) for place in places]
