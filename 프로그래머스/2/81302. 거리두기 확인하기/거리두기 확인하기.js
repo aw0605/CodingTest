@@ -1,48 +1,47 @@
 function solution(places) {
-  const result = [];
-  for (let place of places) {
-    let isSafePlace = 1;
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 5; j++) {
-        if (place[i][j] === "P") {
-          if (!isSafe(place, i, j)) {
-            isSafePlace = 0;
-            break;
-          }
-        }
-      }
-      if (!isSafePlace) break;
-    }
-    result.push(isSafePlace);
-  }
+    places = places.map(p => p.map(el => el.split('')))
+    let ans = [];
+    let distance = 1;
     
-  return result;
-}
-
-function isSafe(place, x, y) {
-  const dx = [0, 0, 1, -1];
-  const dy = [1, -1, 0, 0];
-
-  for (let i = 0; i < 4; i++) {
-    const nx = x + dx[i];
-    const ny = y + dy[i];
-
-    if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5) {
-      if (place[nx][ny] === "P") return false;
-      else if (place[nx][ny] === "O") {
-        for (let j = 0; j < 4; j++) {
-          const nnx = nx + dx[j];
-          const nny = ny + dy[j];
-
-          if (nnx >= 0 && nnx < 5 && nny >= 0 && nny < 5) {
-            if (nnx !== x || nny !== y) {
-              if (place[nnx][nny] === "P") return false;
+    for(let i = 0; i < places.length; i++) {
+        distance = 1;
+        for (let j = 0; j < 5; j++) {
+            for (let k = 0; k < 5; k++) {
+                if (places[i][j][k] === 'P') {
+                    dfs(copyArr(places[i]), j, k, 0);
+                    if (distance === 0) break;
+                }
             }
-          }
         }
-      }
+        distance === 1? ans.push(1) : ans.push(0);
     }
-  }
+    return ans;
 
-  return true;
+    function dfs(place, x, y, step) {
+        place[x][y] = 'X';
+        let moves = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+        let ables = [];
+        if (step === 2) return;
+        for (let i = 0; i < 4; i++) {
+            let [nx, ny] = [x + moves[i][0], y + moves[i][1]];            
+            if (place[nx] && place[nx][ny] === 'O') {
+                place[nx][ny] = 'X';
+                ables.push([nx, ny]);
+            } else if (place[nx] && place[nx][ny] === 'P') {
+                distance = 0;
+                return;
+            } 
+        }
+        if (!ables.length) return;
+        for (let i = 0; i < ables.length; i++) {
+            let [nx, ny] = ables[i];
+            dfs(place, nx, ny, step + 1);
+        }
+    }
+
+    function copyArr(arr) {
+        let newarr = [];
+        for (let i = 0; i < arr.length; i++) newarr.push([...arr[i]]);
+        return newarr;
+    }
 }
