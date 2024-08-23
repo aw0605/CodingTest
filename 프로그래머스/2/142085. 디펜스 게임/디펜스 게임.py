@@ -1,16 +1,11 @@
-from heapq import heappop, heappush
+import heapq as hq
 
 def solution(n, k, enemy):
-    answer, sumEnemy = 0, 0
-    heap = []
+    q = enemy[:k]
+    hq.heapify(q)
     
-    for e in enemy:
-        heappush(heap, -e)
-        sumEnemy += e
-        if sumEnemy > n:
-            if k == 0: break
-            sumEnemy += heappop(heap) 
-            k -= 1
-        answer += 1
-        
-    return answer
+    for idx in range(k,len(enemy)):
+        n -= hq.heappushpop(q,enemy[idx])    
+        if n < 0: return idx
+    
+    return len(enemy)
