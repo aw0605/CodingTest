@@ -1,21 +1,19 @@
 def solution(s):
     answer = len(s)
     
-    for i in range(1, len(s) // 2 + 1):
-        sentence = ""
-        idx = 0
-
-        while idx < len(s):
-            cnt = 1
-            while s[idx:idx+i] == s[idx+i:idx+i+i]:
-                cnt += 1
-                idx += i
-            
-            if cnt > 1:
-                sentence += str(cnt)
-            sentence += s[idx:idx+i]
-            idx += i
+    for x in range(1, int(len(s)/2)+1):
+        d = 0
+        comp = ''
+        c = 1
+        for i in range(0, len(s), x):
+            temp = s[i:i+x]
+            if comp == temp: c += 1
+            elif comp != temp:
+                d += len(temp)
+                if c > 1: d += len("{}".format(c))
+                c = 1
+                comp = temp
+        if c > 1: d += len("{}".format(c))
+        answer = min(answer, d)
         
-        answer = min(answer, len(sentence))
-    
     return answer
