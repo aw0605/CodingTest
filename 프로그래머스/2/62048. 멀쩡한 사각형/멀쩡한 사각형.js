@@ -1,11 +1,10 @@
+function solution(w,h){
+    const slope = h / w;
+    let result = 0;
 
-function gcd(w, h) {
-    if (h == 0) return w
-    else return gcd(h, w % h)
-}
+    for (let i = 1; i <= w; i++) {
+        result += Math.ceil(slope * i);
+    }
 
-function solution(w, h) {
-    const gcdN = gcd(w, h);
-    
-    return w * h - (w + h - gcdN);
+    return ((h * w) - result) * 2;
 }
