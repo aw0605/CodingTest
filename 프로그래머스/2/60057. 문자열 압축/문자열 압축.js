@@ -1,23 +1,31 @@
 function solution(s) {
-    let answer = s.length;
+    if (s.length === 1 ) return 1;
+    let min = 1000;
     
-    for (let i = 1; i <= Math.floor(s.length / 2); i++) {
-      	let sentence = "";
-        let idx = 0;
-
-      	while (idx < s.length) {
-           let cnt = 1;
-           while (s.slice(idx, idx+i) === s.slice(idx+i, idx+i+i)) {
-                 cnt++;
-                 idx += i;
-           }
-          
-           if (cnt > 1) sentence += cnt;
-           const str = s.slice(idx, idx+i);
-           sentence = sentence + str;
-           idx += i;
+    for (let i = 1; i <= s.length / 2; i++) {
+        let str1 = '';
+        let str2 = '';
+        let ans = '';
+        let count = 1;
+        for (let j = 0; j < s.length; j += i) {
+            if (j === 0) str1 = s.slice(j, j + i);
+            else {
+                str2 = s.slice(j, j + i)
+                if (str1 === str2) {
+                    count++;
+                    if (j+i === s.length) ans += `${count}${str1}`;
+                } else{
+                    if (count > 1) ans += `${count}${str1}`
+                    else ans += str1;
+                    count = 1;
+                    if (str1.length > str2.length) ans += str2;
+                    str1 = str2;
+                    if (j+i === s.length) ans += str2;
+                }
+            }
         }
-        answer = Math.min(answer, sentence.length);
+        min = Math.min(ans.length, min);
     }
-    return answer;
+
+    return min;
 }
