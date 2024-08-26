@@ -1,28 +1,17 @@
-def getCollatz(k):
-    result = []
-    
-    while k != 1:
-        result.append(k)
-        k = k / 2 if k % 2 == 0 else k * 3 + 1     
-    result.append(k)
-    
-    return result
- 
 def solution(k, ranges):
     answer = []
-    collatz = getCollatz(k)
-
-    for r in ranges:
-        total = 0
-        ubakRange = collatz[r[0] : len(collatz)+r[1]]
+    arr = [k]
+    
+    while k > 1:
+        k = k / 2 if k % 2 == 0 else k * 3 + 1
+        arr.append(k)
         
-        if r[0] >= r[1] + len(collatz):
+    area = [0]
+    for i in range(len(arr)-1): area.append(area[-1]+(arr[i]+arr[i+1])/2)
+        
+    for a, b in ranges:
+        if a >= len(area) or b-1 < -len(area) or area[b-1]-area[a] < 0: 
             answer.append(-1)
-            continue
-            
-        for i in range(len(ubakRange) - 1):
-            total += (((ubakRange[i] + ubakRange[i+1]) * 1) / 2)
-            
-        answer.append(total)
+        else: answer.append(area[b-1]-area[a])
         
     return answer
