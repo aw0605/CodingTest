@@ -1,27 +1,16 @@
 def solution(picks, minerals):
-    answer = 0
-    m_score = []
-    m_groups = []
-    
-    for i in minerals[:5*sum(picks)]:
-        if i == "diamond": m_score.append(25)
-        elif i == "iron": m_score.append(5)
-        else: m_score.append(1)
+    def solve(picks, minerals, fatigue):
+        if sum(picks) == 0 or len(minerals) == 0:
+            return fatigue
+        result = [float('inf')]
+        for i, fatigues in enumerate(({"diamond": 1, "iron": 1, "stone": 1},
+                                      {"diamond": 5, "iron": 1, "stone": 1},
+                                      {"diamond": 25, "iron": 5, "stone": 1},)):
+            if picks[i] > 0:
+                temp_picks = picks.copy()
+                temp_picks[i] -= 1
+                result.append(
+                    solve(temp_picks, minerals[5:], fatigue + sum(fatigues[mineral] for mineral in minerals[:5])))
+        return min(result)
 
-    for i in range(len(m_score)//5+1): m_groups.append(m_score[5*i:5*(i+1)])
-
-    m_groups.sort(key= lambda x: sum(x), reverse=True)
-
-    for i in range(len(picks)) :
-        while (picks[i] != 0 and len(m_groups) != 0):
-            if i == 0: answer += len(m_groups[0])
-            elif i == 1:
-                for j in m_groups[0]:
-                    if j == 1: answer += 1
-                    else: answer += j//5
-            else: answer += sum(m_groups[0])
-            
-            picks[i] -= 1
-            del m_groups[0]
-
-    return answer
+    return solve(picks, minerals, 0)
