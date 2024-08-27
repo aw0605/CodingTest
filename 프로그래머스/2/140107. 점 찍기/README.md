@@ -1,10 +1,10 @@
 # [level 2] 점 찍기 - 140107 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/140107) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/140107?language=python3) 
 
 ### 성능 요약
 
-메모리: 37.7 MB, 시간: 22.91 ms
+메모리: 10.3 MB, 시간: 559.56 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 08월 27일 16:31:18
+2024년 08월 27일 16:32:00
 
 ### 문제 설명
 
