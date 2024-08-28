@@ -1,24 +1,36 @@
-function changeTime(time) {
-    time = time.split(":")
-    return +time[0] * 60 + +time[1]
-}
-
 function solution(plans) {
-  const answer = [];
-
-  plans = plans
-    .map(([name, start, playtime]) => [name, changeTime(start), +playtime])
-    .sort((a, b) => b[1] - a[1]);
-
-  while (plans.length) {
-    const [name, start, playtime] = plans.pop();
-
-    answer.forEach((v, i) => {
-      if (start < v[1]) answer[i][1] += playtime;
-    });
-      
-    answer.push([name, start + playtime]);
-  }
+    let answer = [];
+    let hash  ={}
     
-  return answer.sort((a, b) => a[1] - b[1]).map(v => v[0]);
+    plans.forEach(el=>{
+        el[1] = convertTime(el[1])
+        el[2] = Number(el[2])
+        hash[el[1]] = [el[2],el[0]]
+    })
+
+    plans.sort((a,b)=>a[1]-b[1])
+
+    let startTime = plans[0][1]
+    let stack =[]
+    let finish = 0
+    
+    while (finish < plans.length){
+        if (hash[startTime]) stack.push(hash[startTime])
+        if(stack.length){
+            stack[stack.length-1][0]--
+            if (stack[stack.length-1][0] === 0) {
+                answer.push(stack[stack.length-1][1])
+                stack.pop()
+                finish++
+            }
+        }
+        startTime++
+    }
+
+    function convertTime(time){
+        let [h,m] = time.split(':').map(Number)
+        return h*60+m
+    }
+
+    return answer;
 }
