@@ -1,21 +1,13 @@
-def change_time(time):
-    time = time.split(":")
-    return int(time[0]) * 60 + int(time[1])
-
 def solution(plans):
-    answer = []
+    plans = sorted(map(lambda x: [x[0], int(x[1][:2]) * 60 + int(x[1][3:]), int(x[2])], plans), key=lambda x: -x[1])
 
-    plans = [[name, change_time(start), int(playtime)] for name, start, playtime in plans]
-    plans.sort(key=lambda x: x[1], reverse=True)
-
+    lst = []
     while plans:
-        name, start, playtime = plans.pop()
+        x = plans.pop()
+        for i, v in enumerate(lst):
+            if v[0] > x[1]: lst[i][0] += x[2]
+        lst.append([x[1] + x[2], x[0]])
+        
+    lst.sort()
 
-        for i in range(len(answer)):
-            if start < answer[i][1]: answer[i][1] += playtime
-
-        answer.append([name, start + playtime])
-
-    answer.sort(key=lambda x: x[1])
-    
-    return [v[0] for v in answer]
+    return list(map(lambda x: x[1], lst))
