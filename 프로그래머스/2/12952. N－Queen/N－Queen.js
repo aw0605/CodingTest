@@ -1,31 +1,27 @@
 function solution(n) {
-  let answer = 0;
-  const NOT_VISITED = 100;
-  const status = Array(n).fill(NOT_VISITED);
+    let answer = 0;
+    const queens = [];
 
-  const isAvailable = (status, row, col) => {
-    if (status[col] !== NOT_VISITED) return false;
-    for (let idx = 0; idx < status.length; idx++) {
-      if (Math.abs((row - status[idx]) / (col - idx)) === 1) return false;
+    function isPossible(row, i) {
+        for (const [x, y] of queens) {
+            if (row === x || i === y) return false;
+            if (Math.abs(x - row) === Math.abs(y - i)) return false;
+        }
+        return true;
     }
-    return true;
-  };
 
-  const dfs = (n, row, status) => {
-    if (row === n) {
-      answer += 1;
-      return;
+    function backtrack(row) {
+        if (row === n) answer++;
+        
+        for (let i = 0; i < n; i++) {
+            if (!isPossible(row, i)) continue;
+            queens.push([row, i]);
+            backtrack(row + 1);
+            queens.pop();
+        }
     }
-    for (let col = 0; col < n; col++) {
-      if (isAvailable(status, row, col)) {
-        status[col] = row;
-        dfs(n, row + 1, status);
-        status[col] = NOT_VISITED;
-      }
-    }
-  };
-
-  dfs(n, 0, status);
-
-  return answer;
+    
+    backtrack(0);
+    
+    return answer;
 }
