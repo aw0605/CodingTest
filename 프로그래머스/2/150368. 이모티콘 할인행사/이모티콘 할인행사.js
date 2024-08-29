@@ -1,45 +1,48 @@
-function Permutation(arr, selectNum) {
-  const result = [];
-
-  if (selectNum === 1) return arr.map((v) => [v]);
-
-  arr.forEach((v, idx, arr) => {
-    const fixed = v;
-    const restArr = arr;
-    const permutationArr = Permutation(restArr, selectNum - 1);
-    const combineFix = permutationArr.map((v) => [fixed, ...v]);
-    result.push(...combineFix);
-  });
-
-  return result;
-}
-
 function solution(users, emoticons) {
-  const answer = [];
-  const permutation = Permutation([10, 20, 30, 40], emoticons.length);
-
-  permutation.forEach((combi) => {
-    let service = 0;
-    const costs = Array(users.length).fill(0); 
-
-    combi.forEach((c, ci) => {
-      users.forEach((user, ui) => {
-        if (user[0] <= c) 
-          costs[ui] += emoticons[ci] * ((100 - c) / 100);
-      });
-    });
-
-    let sum = 0;
-    for (let i = 0; i < costs.length; i++) {
-      if (costs[i] < users[i][1]) sum += costs[i];
-      else service++;
+    const salePercent = [10, 20, 30, 40]
+    const cases = []
+    const arr = []
+    const emoLen = emoticons.length
+    const result = [0,0]
+    
+    function saleDFS(depth = 0) {
+        if (depth === emoLen) {
+            cases.push([...arr])
+            return
+        }
+        for (let i = 0 ; i < salePercent.length ; i++) {
+            arr[depth] = salePercent[i]
+            saleDFS(depth+1)
+        }
     }
-    answer.push([service, sum]);
-  });
+    saleDFS()
 
-
-  return answer.sort((a, b) => {
-    if (a[0] > b[0]) return b[0] - a[0];
-    else if (a[0] === b[0]) return b[1] - a[1];
-  })[0];
+    cases.forEach((curCase, curCaseIdx) => {
+        let emoticonPlus = 0
+        let sumPrice = 0
+        users.forEach(([buyPercent, buyPlus], userIdx) => {
+            let price = 0
+            let etPlusFlag = false
+            emoticons.every((et, etIdx) => {
+                if (curCase[etIdx] >= buyPercent) {
+                    price += et * (100 - curCase[etIdx]) / 100 
+                }
+                if (price >= buyPlus) {
+                    etPlusFlag = true
+                    return false
+                }
+                return true
+            })
+            if (etPlusFlag) emoticonPlus++
+            else sumPrice += price
+        })
+        if (emoticonPlus > result[0]) {
+            result[0] = emoticonPlus
+            result[1] = sumPrice
+        } else if (result[0] === emoticonPlus && sumPrice > result[1]) {
+            result[1] = sumPrice
+        }
+    })
+    
+    return result
 }
