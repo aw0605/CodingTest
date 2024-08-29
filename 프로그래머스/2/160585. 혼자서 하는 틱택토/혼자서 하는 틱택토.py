@@ -1,29 +1,21 @@
-def get_count(board, kind):
-    return sum(row.count(kind) for row in board)
+def check_win(player, board):
+    for i in range(3):
+        if all(cell == player for cell in board[i]): return True
 
-def check_win(board, kind):
-    win_lines = [
-        [board[0][0], board[0][1], board[0][2]],
-        [board[1][0], board[1][1], board[1][2]],
-        [board[2][0], board[2][1], board[2][2]],
-        [board[0][0], board[1][0], board[2][0]],
-        [board[0][1], board[1][1], board[2][1]],
-        [board[0][2], board[1][2], board[2][2]],
-        [board[0][0], board[1][1], board[2][2]],
-        [board[0][2], board[1][1], board[2][0]],
-    ]
+    for j in range(3):
+        if all(board[i][j] == player for i in range(3)): return True
 
-    return any(all(cell == kind for cell in line) for line in win_lines)
+    if all(board[i][i] == player for i in range(3)): return True
+    if all(board[i][2-i] == player for i in range(3)): return True
 
-def is_board_valid(board):
-    o_count = get_count(board, "O")
-    x_count = get_count(board, "X")
-
-    if x_count > o_count or o_count > x_count + 1: return False
-    if check_win(board, "O") and o_count != x_count + 1: return False
-    if check_win(board, "X") and x_count != o_count: return False
-
-    return True
+    return False
 
 def solution(board):
-    return 1 if is_board_valid(board) else 0
+    num_x = sum(row.count('X') for row in board)
+    num_o = sum(row.count('O') for row in board)
+
+    if num_x - num_o > 0 or abs(num_x - num_o) > 1: return 0
+    elif (check_win('O', board) and num_x != num_o - 1) or (check_win('X', board) and num_x != num_o):
+        return 0
+
+    return 1
