@@ -1,15 +1,19 @@
 function solution(targets) {
-    let answer = 0;
-    targets.sort((a,b) => a[1] - b[1])
-    let tmp = 0
+    let answer = 1;
+    let len = targets.length;
+    targets.sort((a,b) => a[0] === b[0] ? b[0] - a[0] : a[0] - b[0])
     
-    for (let target of targets) {
-        if (target[0] < tmp) continue
-        else {
-            answer++
-            tmp = target[1]
+    let l = targets[0][0]
+    let r = targets[0][1]
+    
+    for (let i =1; i<len; i++) {
+        if (r > targets[i][0]){
+            if (r > targets[i][1]) r = targets[i][1]
+        } else {
+            answer++;
+            r = targets[i][1]
         }
     }
     
-    return answer;
+    return answer
 }
