@@ -1,16 +1,26 @@
 function solution(name) {
-    let cursorNum = name.length - 1;
-    let spellNum = 0;
-    
+    let sum = 0;
     for (let i = 0; i < name.length; i++) {
-        const s = name[i];
-        spellNum += Math.min(s.charCodeAt(0) - 'A'.charCodeAt(0), 'Z'.charCodeAt(0) - s.charCodeAt(0) + 1);
-
-        let next = i + 1;
-        while (next < name.length && name[next] === 'A') next++;
-
-        cursorNum = Math.min(cursorNum, 2 * i + name.length - next, i + 2 * (name.length - next));
+        let diff = name[i].charCodeAt() - 'A'.charCodeAt();
+        sum += diff > 13 ? 26 - diff : diff;
     }
-    
-    return spellNum + cursorNum;
+
+    let minMove = name.length - 1;
+    for (let i = 1; i < name.length; i++) {
+        if (name[i] === 'A') {
+            for (var j = i + 1; j < name.length; j++) {
+                if (name[j] !== 'A') {
+                    break;
+                }
+            }
+
+            const left = i - 1;
+            const right = name.length - j;
+            minMove = Math.min(minMove, left > right ? left + right * 2 : left * 2 + right);
+
+            i = j;
+        }
+    }
+
+    return sum + minMove;
 }
