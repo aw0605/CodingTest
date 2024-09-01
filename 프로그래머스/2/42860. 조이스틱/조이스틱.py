@@ -1,13 +1,21 @@
 def solution(name):
-    cursor_num = len(name) - 1  
-    spell_num = 0
-    
-    for i, s in enumerate(name):
-        spell_num += min(ord(s) - ord('A'), ord('Z') - ord(s) + 1)
+    answer = 0
+    n = len(name)
 
-        next = i + 1
-        while next < len(name) and name[next] == 'A': next += 1
+    def alphabet_to_num(char):
+        num_char = [i for i in range(14)] + [j for j in range(12, 0, -1)]
+        return num_char[ord(char) - ord('A')]
 
-        cursor_num = min([cursor_num, 2 * i + len(name) - next, i + 2 * (len(name) - next)])
-            
-    return spell_num + cursor_num
+    for ch in name:
+        answer += alphabet_to_num(ch)
+
+    move = n - 1
+    for idx in range(n):
+        next_idx = idx + 1
+        while (next_idx < n) and (name[next_idx] == 'A'):
+            next_idx += 1
+        distance = min(idx, n - next_idx)
+        move = min(move, idx + n - next_idx + distance)
+
+    answer += move
+    return answer
