@@ -1,10 +1,10 @@
 # [level 2] 양궁대회 - 92342 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/92342?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/92342?language=javascript) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 746.35 ms
+메모리: 36.1 MB, 시간: 27.13 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 09월 01일 18:10:24
+2024년 09월 01일 18:13:33
 
 ### 문제 설명
 
