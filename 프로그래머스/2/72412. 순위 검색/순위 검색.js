@@ -1,47 +1,63 @@
-function binarySearch(arr, target) {
-    let left = 0, right = arr.length - 1;
+function solution(info, query) {
+    let answer = [];
 
-    while (left <= right) {
-        let mid = Math.floor((left + right) / 2);
-        if (arr[mid] >= target) right = mid - 1;
-        else left = mid + 1;
+    function combi(arr, selectNum) {
+        const result=[];
+        if (selectNum === 1) return arr.map((v)=>[v]);
+        else {
+            arr.forEach((v, i)=>{
+                const fixed = v;
+                const restArr = arr.slice(i+1);
+                const combiArr = combi(restArr, selectNum-1);
+                const mergeArr = combiArr.map((v)=>[fixed, ...v]);
+                result.push(...mergeArr);
+            });
+            return result;
+        }
+    };
+
+    function bsGo(arr, tgt) {
+        let left = 0, right = arr.length;
+        
+        while (left < right){
+            const mid = parseInt((left+right)/2);
+            if (arr[mid] < tgt) left = mid+1;
+            else right = mid;
+        }
+        return left;
     }
 
-    return left;
-}
+    const info_score = new Map();
+    info_score.set("", []);
 
-function getInfos(info) {
-    const infos = {};
-    info.forEach(infoStr => {
-        const arr = infoStr.split(" ");
-        const score = parseInt(arr.pop());
-        const key = arr.join(" ");
-        if (infos[key]) infos[key].push(score);
-        else infos[key] = [score];
+    info.forEach(v => {
+        val = v.split(" ");
+        const score = val[val.length-1];
+        val.pop();
+        info_score.get("").push(+score);
+
+        for (let i = 1; i <= 4; i++) {
+            const comb = combi("0123".split(""), i);
+            comb.forEach((i)=>{
+                const key = i.map((v) => val[+v]).join("");
+                if (info_score.has(key)) info_score.get(key).push(+score);
+                else info_score.set(key, [+score]);
+            });
+        }
+    });
+    
+    for (const [key, v] of info_score) v.sort((a, b) => a - b)
+
+    query.forEach((v)=>{
+        v = v.replace(/\sand\s|\-/gi, "").split(" ");
+        const key = v[0];
+        const score =+ v[1];
+        if (info_score.has(key)) {
+            const scores = info_score.get(key);
+            const index = bsGo(scores, score);
+            answer.push(scores.length-index);
+        } else answer.push(0);
     });
 
-    for (const key in infos) infos[key].sort((a, b) => a - b);
-
-    return infos;
-}
-
-function getResult (infos, query, score) {
-  const infosKey = Object.keys(infos);
-  return infosKey
-    .filter(key => query.every(v => key.includes(v)))
-    .reduce((a, key) => a + infos[key].length - binarySearch(infos[key], score), 0);
-}
-
-function solution(info, query) {
-  let answer = [];
-  const infos = getInfos(info)
-  query
-    .map(q => q.split(/ and | |-/i).filter(v => v !== ""))
-    .forEach(q => {
-      const score = q.pop();
-      const result = getResult(infos, q, score);
-      answer.push(result)
-    })
-    
-  return answer;
+    return answer;
 }
