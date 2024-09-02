@@ -1,37 +1,33 @@
-from itertools import combinations
-from collections import defaultdict
-import bisect
-
 def solution(info, query):
-    answer = []
+    data = dict()
+    for a in ['cpp', 'java', 'python', '-']:
+        for b in ['backend', 'frontend', '-']:
+            for c in ['junior', 'senior', '-']:
+                for d in ['chicken', 'pizza', '-']:
+                    data.setdefault((a, b, c, d), list())
+    for i in info:
+        i = i.split()
+        for a in [i[0], '-']:
+            for b in [i[1], '-']:
+                for c in [i[2], '-']:
+                    for d in [i[3], '-']:
+                        data[(a, b, c, d)].append(int(i[4]))
 
-    def combi(arr, select_num): return list(combinations(arr, select_num))
+    for k in data: data[k].sort()
 
-    info_score = defaultdict(list)
-    info_score[""] = []
+    answer = list()
+    for q in query:
+        q = q.split()
+        pool = data[(q[0], q[2], q[4], q[6])]
+        find = int(q[7])
+        l = 0
+        r = len(pool)
+        mid = 0
+        while l < r:
+            mid = (r+l)//2
+            if pool[mid] >= find: r = mid
+            else: l = mid+1
 
-    for v in info:
-        val = v.split(" ")
-        score = int(val.pop())
-        info_score[""].append(score)
-
-        for i in range(1, 5):
-            comb = combi("0123", i)
-            for c in comb:
-                key = ''.join([val[int(index)] for index in c])
-                info_score[key].append(score)
-
-    for key in info_score: info_score[key].sort()
-
-    for v in query:
-        v = v.replace(" and ", "").replace("-", "").split(" ")
-        key = v[0]
-        score = int(v[1])
-
-        if key in info_score:
-            scores = info_score[key]
-            index = bisect.bisect_left(scores, score)
-            answer.append(len(scores) - index)
-        else: answer.append(0)
+        answer.append(len(pool)-l)
 
     return answer
