@@ -1,33 +1,35 @@
 function solution(line) {
-  const points = [];
+    const N = line.length;
+    const INF = Number.MAX_SAFE_INTEGER;
+    const crossPoints = [];
+    let minX = INF, minY = INF, maxX = -INF, maxY = -INF;
 
-  for (let i = 0; i < line.length; i++) {
-    for (let j = i + 1; j < line.length; j++) {
-      const [a, b, e] = line[i];
-      const [c, d, f] = line[j];
-      const adbc = a * d - b * c;
-        
-      if (((b * f - e * d) / adbc) % 1 === 0 &&((e * c - a * f) / adbc) % 1 === 0) {
-        points.push([(b * f - e * d) / adbc, (e * c - a * f) / adbc]);
-      }
+    for (let i = 0; i < N - 1; i++) {
+        for (let j = i + 1; j < N; j++) {
+            const [a, b, e] = line[i];
+            const [c, d, f] = line[j];
+
+            const mod = a * d - b * c;
+            if (!mod) continue;
+
+            const xNumerator = b * f - e * d;
+            const yNumerator = e * c - a * f;
+            if (xNumerator % mod || yNumerator % mod) continue;
+
+            const x = xNumerator / mod;
+            const y = yNumerator / mod;
+
+            crossPoints.push([x, y]);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+        }
     }
-  }
 
-  let minX = Infinity, minY = Infinity, maxY = -Infinity, maxX = -Infinity;
+    const paper = [...Array(maxY - minY + 1)].map(() => [...Array(maxX - minX + 1)].map(() => '.'));
 
-  for (let [x, y] of points) {
-    minX = Math.min(minX, x);
-    maxX = Math.max(maxX, x);
-    minY = Math.min(minY, y);
-    maxY = Math.max(maxY, y);
-  }
+    crossPoints.forEach(([x, y]) => paper[maxY - y][x - minX] = '*');
 
-  const width = maxX - minX + 1;
-  const height = maxY - minY + 1;
-
-  const star = Array.from(Array(height), () => Array(width).fill("."));
-
-  for (let [x, y] of points) star[maxY - y][x - minX] = "*";
-
-  return star.map((a) => a.join(""));
+    return paper.map(v => v.join(''));
 }
