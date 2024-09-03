@@ -1,30 +1,28 @@
 def solution(line):
-    points = []
+    cross = set()
+    
+    for a in range(len(line)):
+        for b in range(len(line)):
+            if a == b: continue
+            point = getIntCross(line[a], line[b])
+            if point: cross.add(point)
+    xs, ys = list(map(lambda x: x[0], cross)), list(map(lambda x: x[1], cross))
 
-    for i in range(len(line)):
-        for j in range(i + 1, len(line)):
-            a, b, e = line[i]
-            c, d, f = line[j]
-            adbc = a * d - b * c
-            
-            if adbc != 0:
-                x = (b * f - e * d) / adbc
-                y = (e * c - a * f) / adbc
+    startX, startY = min(xs), min(ys)
+    height = max(ys) - startY + 1
+    width = max(xs) - startX + 1
+    cross = list(map(lambda x: (x[0]-startX, x[1]-startY), cross))
 
-                if x.is_integer() and y.is_integer(): points.append((int(x), int(y)))
+    answer = ['.' * width for _ in range(height)]
 
-    if not points: return []
+    for x, y in cross: answer[y] = answer[y][:x]+'*'+answer[y][x+1:]
 
-    minX = min(point[0] for point in points)
-    maxX = max(point[0] for point in points)
-    minY = min(point[1] for point in points)
-    maxY = max(point[1] for point in points)
+    return answer[::-1]
 
-    width = maxX - minX + 1
-    height = maxY - minY + 1
+def getIntCross(l1, l2):
+    a, b, e = l1; c, d, f = l2
+    if a*d - b*c == 0: return False
+    x = (b*f - e*d) / (a*d - b*c)
+    y = (e*c - a*f) / (a*d - b*c)
 
-    star = [['.'] * width for _ in range(height)]
-
-    for x, y in points: star[maxY - y][x - minX] = '*'
-
-    return [''.join(row) for row in star]
+    return (int(x), int(y)) if x==int(x) and y==int(y) else False
