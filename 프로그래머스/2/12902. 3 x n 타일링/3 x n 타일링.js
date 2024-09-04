@@ -1,19 +1,13 @@
-function solution (n) {
-  const dp = [0, 3, 11];
-  const idx = n >> 1;
-  
-  if (n % 2) return 0;
-  if (idx < 3) return dp[idx];
-  
-  for(let i = 3; i <= idx; i++) {
-    dp[i] = dp[i-1] * 3 + 2;
-    
-    for(let j = 1; j < i-1; j++) {
-      dp[i] += dp[j] * 2;
+function solution(n) {
+    if (n % 2 !== 0) return 0;
+
+    let i = 0;
+    let dp = [1];
+    let sum = 0;
+    for(i = 2; i <= n; i += 2) {
+        dp[i] = (dp[i-2] * 3 + sum * 2) % 1000000007;
+        sum += dp[i-2];
     }
-    
-    dp[i] %= 1000000007;
-  }
-  
-  return dp[idx];
+
+    return dp[n] % 1000000007;
 }
