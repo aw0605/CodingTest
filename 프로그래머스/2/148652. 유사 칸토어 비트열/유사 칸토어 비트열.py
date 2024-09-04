@@ -1,26 +1,17 @@
 def solution(n, l, r):
-    q_l = quin(l - 1)
-    q_r = quin(r)
-    count_l = decode(q_l)
-    count_r = decode(q_r)
-    return count_r - count_l
+    def count_bit_1(num):
+        if num <= 5: return '11011'[:num].count('1')
 
-def quin(n) :
-    result = []
-    while n > 0:
-        n, mod = divmod(n,5)
-        result.append(mod)
+        base = 1
         
-    return result[::-1]
+        while 5 ** (base + 1) < num: base += 1
 
-def decode(quinary) :
-    result = 0
-    length = len(quinary)
-    dec = [0, 1, 2, 2, 3]
-    
-    for i, x in enumerate(quinary) :
-        exponent = length-i-1
-        result += (4**exponent)*dec[x]
-        if x == 2: break    
-        
-    return result
+        section = num // (5 ** base)
+        remainder = num % (5 ** base)
+        answer = section * (4 ** base)
+
+        if section >= 3: answer -= (4 ** base)
+        if section == 2: return answer
+        else: return answer + count_bit_1(remainder)
+
+    return count_bit_1(r) - count_bit_1(l - 1)
