@@ -1,12 +1,15 @@
 def solution(n):
-    if n % 2 != 0: return 0
+    if n % 2 == 1: return 0
 
-    dp = [0] * (n + 1)
-    dp[0] = 1
+    a = 1
+    answer = 1
     total = 0
-
-    for i in range(2, n + 1, 2):
-        dp[i] = (dp[i-2] * 3 + total * 2) % 1000000007
-        total += dp[i-2]
-
-    return dp[n] % 1000000007
+    i = 2
+    
+    while i <= n:
+        answer = a*3 + total*2
+        total += a
+        a = answer
+        i += 2
+        
+    return answer % 1000000007
