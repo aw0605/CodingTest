@@ -1,10 +1,10 @@
 # [level 2] 당구 연습 - 169198 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/169198?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/169198) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 5.05 ms
+메모리: 10.5 MB, 시간: 5.36 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 09월 05일 17:25:37
+2024년 09월 05일 17:28:16
 
 ### 문제 설명
 
