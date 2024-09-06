@@ -1,25 +1,31 @@
 function solution(h1, m1, s1, h2, m2, s2) {
-    let answer = 0;
-    let sTime = h1 * 3600 + m1 * 60 + s1;
-    let eTime = h2 * 3600 + m2 * 60 + s2;
+    const getCount = (h, m, s) => {
+    let [mCount, hCount] = [0, 0];
+    let result = 0;
+    mCount += h * 59 + m;
+    hCount += h * 60 + m;
+    result--
 
-    if (sTime === 0 * 3600 || sTime === 12 * 3600) answer++
+    const curMDegree = m * 6;
+    const curHDegree = 30 * (h % 12) + 0.5 * m;
+    const condition1 = curMDegree <= 5.9 * s;
+    const condition2 = curHDegree <= (6 - 1 / 120) * s;
 
-    while (sTime < eTime) {
-        let hCurAngle = (sTime / 120) % 360;
-        let mCurAngle = (sTime / 10) % 360;
-        let sCurAngle = (sTime * 6) % 360;
+    if (condition1) mCount++
+    if (condition2) hCount++
 
-        let hNextAngle = ((sTime+1)/120) % 360 === 0 ? 360 : ((sTime+1)/120) % 360;
-        let mNextAngle = ((sTime+1)/10) % 360 === 0 ? 360 : ((sTime+1)/10) % 360;
-        let sNextAngle = ((sTime+1)*6) % 360 === 0 ? 360 : ((sTime+1)*6) % 360;
-
-        if (sCurAngle < hCurAngle && sNextAngle >= hNextAngle) answer++
-        if (sCurAngle < mCurAngle && sNextAngle >= mNextAngle) answer++
-        if (sNextAngle === hNextAngle && hNextAngle === mNextAngle) answer--
-
-        sTime++
+    if (h >= 12) {
+      hCount--
+      result--
     }
 
-    return answer;
+    result += mCount + hCount - 1;
+
+    return result;
+  };
+
+  let result = getCount(h2, m2, s2) - getCount(h1, m1, s1);
+  if (s1 === 0 && m1 === 0) result++
+
+  return result;
 }
