@@ -1,26 +1,24 @@
 def solution(grid):
     answer = []
-    dy = (1, 0, -1, 0)
-    dx = (0, -1, 0, 1)
-    yl, xl = len(grid), len(grid[0])
-    visited = [[[False] * 4 for _ in range(xl)] for _ in range(yl)]
-
-    for y in range(yl):
-        for x in range(xl):
+    direc = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+    visit = [[[0] * 4 for _ in range(len(grid[0]))] for _ in range(len(grid))]
+    
+    def pathfind(r, c, d):
+        count = 0
+        while not visit[r][c][d]:
+            visit[r][c][d] = 1
+            count += 1 
+            if grid[r][c] == 'L': d = (d - 1) % 4
+            elif grid[r][c] == 'R': d = (d + 1) % 4
+            r = (r + direc[d][0]) % len(grid)
+            c = (c + direc[d][1]) % len(grid[0])
+            
+        return count
+    
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
             for d in range(4):
-                if visited[y][x][d]: continue
-                count = 0
-                ny, nx = y, x
+                if visit[r][c][d]: continue
+                answer.append(pathfind(r, c, d))
                 
-                while not visited[ny][nx][d]:
-                    visited[ny][nx][d] = True
-                    count += 1
-                    if grid[ny][nx] == "L": d = (d - 1) % 4
-                    elif grid[ny][nx] == "R": d = (d + 1) % 4
-
-                    ny = (ny + dy[d]) % yl 
-                    nx = (nx + dx[d]) % xl
-                
-                answer.append(count)
-
     return sorted(answer)
