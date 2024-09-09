@@ -1,4 +1,11 @@
 def solution(arr1, arr2):
-    return [[sum(a*b for a, b in zip(A1,A2)) for A2 in zip(*arr2)] for A1 in arr1]
-    # for A2 in zip(*arr2): 풀어서 행의 요소를 열별로 그룹화
-    # [[5, 4, 3], [2, 4, 1], [3, 1, 1]] => [[5,2,3],[4,4,1],[3,1,1]]
+    r1, c1 = len(arr1), len(arr1[0])
+    r2, c2 = len(arr2), len(arr2[0])
+    answer = [[0] * c2 for _ in range(r1)]
+    
+    for i in range(r1):
+        for j in range(c2):
+            for k in range(c1):
+                answer[i][j] += arr1[i][k] * arr2[k][j]
+                
+    return answer
