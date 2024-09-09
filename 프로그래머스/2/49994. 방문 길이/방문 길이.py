@@ -1,13 +1,22 @@
-def solution(dirs):
-    moves = {'U': (0, 1), 'D': (0, -1), 'R': (1, 0), 'L': (-1, 0)}
-    visited = set()
-    x, y = 0, 0
-    
-    for v in dirs:
-        nx, ny = x + moves[v][0], y + moves[v][1]
-        if -5 <= nx <= 5 and -5 <= ny <= 5:
-            visited.add((x,y,nx,ny))
-            visited.add((nx,ny,x,y))
-            x, y = nx, ny
+def isValid(nx, ny):
+    return 0 <= nx < 11 and 0 <= ny < 11
 
-    return len(visited)//2
+def nextLoc(x, y, direc):
+    if direc == "U": nx, ny = x, y + 1
+    elif direc == "D": nx, ny = x, y - 1
+    elif direc == "L": nx, ny = x + 1, y
+    elif direc == "R": nx, ny = x - 1, y
+    return nx, ny
+
+def solution(dirs):
+    answer = set()
+    x,y = 5,5
+    
+    for direc in dirs:
+        nx, ny = nextLoc(x, y, direc)
+        if not isValid(nx, ny): continue
+        answer.add((x,y,nx,ny))
+        answer.add((nx,ny,x,y))
+        x, y = nx, ny
+        
+    return len(answer) / 2
