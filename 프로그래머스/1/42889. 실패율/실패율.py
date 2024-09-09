@@ -1,13 +1,13 @@
 def solution(N, stages):
-    answer = []
-    clearArr = [0] * (N + 1)
+    players = len(stages)
+    fails = {}
+    challengers = [0] * (N+2)
+    for s in stages: challengers[s] += 1
     
-    for v in stages:
-        clearArr[v-1] += 1
-        
-    for i in range(N):
-        player = sum(clearArr[i:])
-        if player == 0: answer.append([i+1, 0])
-        else: answer.append([i+1, clearArr[i] / player])
-
-    return [i for i,v in sorted(answer, key=lambda x: (-x[1], x[0]))]
+    for i in range(1, N+1):
+        if challengers[i] == 0: fails[i] = 0
+        else: 
+            fails[i] = challengers[i]/players
+            players -= challengers[i]
+    
+    return sorted(fails, key = lambda x: fails[x], reverse = True)
