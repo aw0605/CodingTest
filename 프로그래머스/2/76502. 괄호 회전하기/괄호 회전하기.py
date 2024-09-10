@@ -1,17 +1,20 @@
 def solution(s):
-    if len(s) % 2: return 0
     answer = 0
+    n = len(s)
     
-    for i in range(len(s)):
+    for i in range(n):
         stack = []
-        rots = s[i:] + s[:i]
+        for j in range(n):
+            cur = s[(i+j) % n]
+            if cur == "(" or cur == "[" or cur == "{": stack.append(cur)
+            else:
+                if not stack: break
         
-        for j in rots:   
-            if stack and stack[-1] == '[' and j == ']': stack.pop()
-            elif stack and stack[-1] == '{' and j == '}': stack.pop()
-            elif stack and stack[-1] == '(' and j == ')': stack.pop()
-            else: stack.append(j)
-        
-        if not stack: answer += 1
+                if cur == ")" and stack[-1] == "(": stack.pop()
+                elif cur == "]" and stack[-1] == "[": stack.pop()
+                elif cur == "}" and stack[-1] == "{": stack.pop()
+                else: break
+        else:
+            if not stack: answer += 1
         
     return answer
