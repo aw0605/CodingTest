@@ -1,16 +1,18 @@
 def solution(board, moves):
     answer = 0
-    dolls = []
+    bucket = []
+    lanes = [[] for _ in range(len(board[0]))]
     
-    for j in moves:
-        for i in range(len(board)):
-            doll = board[i][j-1]
-            if doll != 0:
-                if dolls and dolls[-1] == doll:
-                    answer += 2
-                    dolls.pop()
-                else: dolls.append(doll)
-                board[i][j-1] = 0
-                break
+    for i in range(len(board)-1, -1, -1):
+        for j in range(len(board[0])):
+            if board[i][j]: lanes[j].append(board[i][j])
+    
+    for m in moves:
+        if lanes[m-1]: 
+            doll = lanes[m-1].pop()
+            if bucket and bucket[-1] == doll:
+                bucket.pop()
+                answer += 2
+            else: bucket.append(doll)
 
     return answer
