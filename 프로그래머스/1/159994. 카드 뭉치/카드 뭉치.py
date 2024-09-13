@@ -1,6 +1,17 @@
+from collections import deque
+
 def solution(cards1, cards2, goal):
-    for v in goal:
-        if len(cards1) > 0 and v == cards1[0]: cards1.pop(0)
-        elif len(cards2) > 0 and v == cards2[0]: cards2.pop(0)
-        else: return "No"
-    return "Yes"
+    cards1 = deque(cards1)
+    cards2 = deque(cards2)
+    goal = deque(goal)
+    
+    while goal:
+        if cards1 and cards1[0] == goal[0]:
+            cards1.popleft()
+            goal.popleft()
+        elif cards2 and cards2[0] == goal[0]:
+            cards2.popleft()
+            goal.popleft()
+        else: break
+        
+    return "Yes" if not goal else "No"
