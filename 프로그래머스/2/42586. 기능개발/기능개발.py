@@ -1,19 +1,19 @@
+import math
+
 def solution(progresses, speeds):
     answer = []
-    day = 0
-    d = 0
+    n = len(progresses)
+    days_left = [math.ceil((100-progresses[i]) / speeds[i]) for i in range(n)]
+    count = 0
+    max_day = days_left[0]
     
-    while len(progresses)> 0:
-        if (progresses[0] + day * speeds[0]) >= 100:
-            progresses.pop(0)
-            speeds.pop(0)
-            d += 1
+    for i in range(n):
+        if days_left[i] <= max_day: count += 1
         else:
-            if d > 0:
-                answer.append(d)
-                d = 0
-            day += 1
+            answer.append(count)
+            count = 1
+            max_day = days_left[i]
             
-    answer.append(d)
-    
+    answer.append(count)
+
     return answer
