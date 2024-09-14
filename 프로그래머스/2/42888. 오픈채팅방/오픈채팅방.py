@@ -1,4 +1,15 @@
 def solution(record):
-    user = {v.split()[1]:v.split()[-1] for v in record if v.startswith('Enter') or v.startswith('Change')}
+    answer = []
+    uid = {}
     
-    return [f'{user[v.split()[1]]}님이 들어왔습니다.' if v.startswith('Enter') else f'{user[v.split()[1]]}님이 나갔습니다.' for v in record if not v.startswith('Change')]
+    for r in record:
+        cmd = r.split(" ") 
+        if cmd[0] != "Leave": uid[cmd[1]] = cmd[2]
+        
+    for r in record:
+        cmd = r.split(" ")
+        if cmd[0] == "Enter": answer.append("%s님이 들어왔습니다." % uid[cmd[1]])
+        elif cmd[0] == "Change": pass
+        else: answer.append("%s님이 나갔습니다." % uid[cmd[1]])
+    
+    return answer
