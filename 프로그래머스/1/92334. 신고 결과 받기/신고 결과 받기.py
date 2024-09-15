@@ -1,12 +1,21 @@
 def solution(id_list, report, k):
-    mail_counts = [0] * len(id_list)
-    dec_counts = {id:0 for id in id_list}
+    answer = []
+    reported_user = {}
+    count = {}
     
-    for r in set(report): dec_counts[r.split(" ")[1]] += 1
-
-    for r in set(report):
-        reporter, reported = r.split(" ")
-        if dec_counts[reported] >= k:
-            mail_counts[id_list.index(reporter)] += 1
-            
-    return mail_counts
+    for r in report:
+        reporter, reported = r.split( )
+        if reported not in reported_user: reported_user[reported] = set()
+        reported_user[reported].add(reporter)
+        
+    for reported, reporters in reported_user.items():
+        if len(reporters) >= k:
+            for uid in reporters:
+                if uid not in count: count[uid] = 1
+                else: count[uid] += 1
+                
+    for i in range(len(id_list)):
+        if id_list[i] not in count: answer.append(0)
+        else: answer.append(count[id_list[i]])
+        
+    return answer
