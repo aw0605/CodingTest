@@ -1,22 +1,29 @@
 function solution(enroll, referral, seller, amount) {
-    const parent = {};
-    const total = {};
+    let answer = [];
+    let map = new Map();
 
-    for (let i = 0; i < enroll.length; i++) {
-        parent[enroll[i]] = referral[i];
-        total[enroll[i]] = 0;
+    for (let i = 0; i < enroll.length; i++){
+        map.set(enroll[i], {parents : referral[i], sales: 0 });
     }
 
-    for (let i = 0; i < seller.length; i++) {
-        let sales = amount[i] * 100;
-        let cur = seller[i];
+    for (let i = 0; i < seller.length; i++){
+        let num = amount[i] * 100;
+        let sell = seller[i];
 
-        while (sales > 0 && cur !== "-") {
-            total[cur] += sales - Math.floor(sales / 10);
-            cur = parent[cur];
-            sales = Math.floor(sales / 10);
+        while (true){
+            let data = map.get(sell);
+            let share = parseInt(num / 10);
+
+            map.set(sell, {parents : data.parents, sales : data.sales + num-share}); 
+
+            if (data.parents === '-') break;
+            if (share === 0) break;
+            sell = data.parents;
+            num = share;
         }
     }
 
-    return enroll.map(name => total[name]);
+    for (let [_, v] of map) answer.push(v.sales);
+
+    return answer;
 }
