@@ -1,34 +1,35 @@
 function solution(info, edges) {
-    let answer = 0;
-    const q = [[0, 1, 0, new Set()]];
+    let answer = 1;
+    const length = info.length;
+    const graph = Array.from({length}, () => []);
 
-    function buildTree(info, edges) {
-        const tree = Array.from({ length: info.length }, () => []);
-        for (let edge of edges) tree[edge[0]].push(edge[1]);
-        return tree;
-    }
-    const tree = buildTree(info, edges);
+    const dfs = (current, nextNodes) => {
+        let [currentNode, sheep, wolves] = current;
+        const newNextNodes = [...nextNodes];
+        const index = newNextNodes.indexOf(currentNode);
 
-    while (q.length) {
-        const [cur, sheep, wolf, visited] = q.shift();
+        sheep += !info[currentNode];
+        wolves += info[currentNode];
         answer = Math.max(answer, sheep);
-        const newVisited = new Set(visited);
-        tree[cur].forEach(node => newVisited.add(node));
-        
-        newVisited.forEach(nNode => {
-            if (info[nNode]) {
-                if (sheep !== wolf + 1) {
-                    const nextVisited = new Set(newVisited);
-                    nextVisited.delete(nNode);
-                    q.push([nNode, sheep, wolf + 1, nextVisited]);
-                }
-            } else {
-                const nextVisited = new Set(newVisited);
-                nextVisited.delete(nNode);
-                q.push([nNode, sheep + 1, wolf, nextVisited]);
-            }
-        });
+
+        if (sheep <= wolves) return;
+
+        if (graph[currentNode].length) newNextNodes.push(...graph[currentNode]);
+
+        newNextNodes.splice(index, 1);
+
+        for (const nextNode of newNextNodes){   
+            dfs([nextNode, sheep, wolves], newNextNodes);
+        }
     }
+
+    for (let i = 0; i < edges.length; i++){
+        const [from, to] = edges[i];
+
+        graph[from].push(to);
+    }
+
+    dfs([0, 0, 0], [0]);
 
     return answer;
 }
