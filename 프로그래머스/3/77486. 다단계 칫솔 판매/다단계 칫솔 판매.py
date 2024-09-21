@@ -1,13 +1,25 @@
+import math
+
 def solution(enroll, referral, seller, amount):
-    parent = dict(zip(enroll, referral))
-    total = {name: 0 for name in enroll}
-    
-    for i in range(len(seller)):
-        sales = amount[i] * 100
-        cur = seller[i]
-        while sales > 0 and cur != "-":
-            total[cur] += sales - (sales//10)
-            cur = parent[cur]
-            sales //= 10
-            
-    return [total[name] for name in enroll]
+    answer = [0] * len(enroll)
+    organization = {}
+
+    for idx in range(len(enroll)):
+        organization[enroll[idx]] = (referral[idx], idx)
+
+    for idx in range(len(seller)):
+        cp, ca = seller[idx], amount[idx] * 100
+        up, ci = organization[cp]
+
+        sh = math.floor(ca * 0.1)
+
+        answer[ci] += ca - sh
+
+        while not (sh == 0 or up == "-"):
+            ca = sh
+            up, ci = organization[up]
+            sh = math.floor(ca * 0.1)
+
+            answer[ci] += ca - sh
+
+    return answer
