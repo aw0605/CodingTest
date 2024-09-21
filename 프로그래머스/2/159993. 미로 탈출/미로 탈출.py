@@ -1,34 +1,34 @@
 from collections import deque
 
-def fast_way_bfs(maps, start, end):
-    visited = [[0] * 1000 for _ in range(1000)]
-    drs, dcs = [0, 0, 1, -1], [1, -1, 0, 0]
-    queue = deque()
-    queue.append(start)
+def isValid(ny,nx,n,m,maps):
+    return 0 <= ny < n and 0 <= nx < m and maps[ny][nx] != "X"
 
-    distance = 0
-    while len(queue):
-        r, c, dist = queue.popleft()
-        if not(0 <= r < len(maps)) or not(0 <= c < len(maps[0])): continue
-        if maps[r][c] == 'X' or visited[r][c] == True: continue 
-        if maps[r][c] == maps[end[0]][end[1]]: return dist
-
-        visited[r][c] = True
-
-        for dr, dc in zip(drs, dcs):
-            if 0 <= r+dr < len(maps) and 0 <= c+dc < len(maps[0]):
-                if maps[r+dr][c+dc] != 'X' and visited[r+dr][c+dc] == False:
-                    queue.append((r+dr, c+dc, dist+1))
-    return -1
+def appendQueue(ny,nx,k,time,visited,q):
+    if not visited[ny][nx][k]:
+        visited[ny][nx][k] = True
+        q.append((ny,nx,k,time+1))
 
 def solution(maps):
-    start, lever, end = 0, 0, 0
-    for r in range(len(maps)):
-        for c in range(len(maps[0])):
-            if maps[r][c] == 'S': start = r, c, 0
-            if maps[r][c] == 'E': end = r, c, 0
-            if maps[r][c] == 'L': lever = r, c, 0
-            
-    first, second = fast_way_bfs(maps, start, lever), fast_way_bfs(maps, lever, end)
+    n,m = len(maps), len(maps[0])
+    visited = [[[False for _ in range(2)] for _ in range(m)] for _ in range(n)]
+    dy, dx = [-1,1,0,0], [0,0,-1,1]
+    q = deque()
+    ey,ex = -1,-1
     
-    return -1 if -1 in [first, second] else first + second
+    for i in range(n):
+        for j in range(m):
+            if maps[i][j] == "S":
+                q.append((i,j,0,0))
+                visited[i][j][0] = True
+            if maps[i][j] == "E": ey,ex = i,j
+    
+    while q:
+        y,x,k,time = q.popleft()
+        if y == ey and x == ex and k == 1: return time
+        for i in range(4):
+            ny,nx = y + dy[i], x + dx[i]
+            if not isValid(ny,nx,n,m,maps): continue
+            if maps[ny][nx] == "L": appendQueue(ny,nx,1,time,visited,q)
+            else: appendQueue(ny,nx,k,time,visited,q)
+            
+    return -1
