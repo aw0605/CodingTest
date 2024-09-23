@@ -1,2 +1,5 @@
 def solution(nums):
-    return min(len(nums)//2, len(set(nums)))
+    num_set = set(nums)
+    n = len(nums)
+    k = n // 2
+    return min(k, len(num_set))
