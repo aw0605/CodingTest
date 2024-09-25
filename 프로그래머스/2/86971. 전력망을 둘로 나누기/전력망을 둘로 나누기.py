@@ -1,7 +1,26 @@
 def solution(n, wires):
-    answer = n
-    for sub in (wires[i+1:] + wires[:i] for i in range(len(wires))):
-        s = set(sub[0])
-        [s.update(v) for _ in sub for v in sub if set(v) & s]
-        answer = min(answer, abs(2 * len(s) - n))
-    return answer
+    graph = [[] for _ in range(n+1)]
+    for a,b in wires:
+        graph[a].append(b)
+        graph[b].append(a)
+        
+    def dfs(node, p):
+        cnt = 1
+        for c in graph[node]:
+            if c != p: cnt += dfs(c, node)
+        return cnt
+    
+    min_diff = float("inf")
+    for a,b in wires:
+        graph[a].remove(b)
+        graph[b].remove(a)
+        
+        cnt_a = dfs(a,b)
+        cnt_b = n - cnt_a
+        
+        min_diff = min(min_diff, abs(cnt_a - cnt_b))
+        
+        graph[a].append(b)
+        graph[b].append(a)
+        
+    return min_diff
