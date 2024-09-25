@@ -1,14 +1,21 @@
-def dfs(computers, visited, node):
-    visited[node] = True
-    for i,c in enumerate(computers[node]):
-        if c and not visited[i]: dfs(computers, visited, i)
-
 def solution(n, computers):
     answer = 0
-    visited = [False] * n
-    for i in range(n):
-        if not visited[i]:
+    visited = [0 for _ in range(n)]
+    
+    def dfs(computers, visited, start):
+        stack = [start]
+        while stack:
+            j = stack.pop()
+            if visited[j]: continue
+            visited[j] = 1
+            for i in range(len(computers)):
+                if computers[j][i] == 1 and not visited[i]: stack.append(i)
+    
+    i = 0
+    while 0 in visited:
+        if visited[i] == 0:
             dfs(computers, visited, i)
             answer += 1
-            
+        i += 1
+    
     return answer
