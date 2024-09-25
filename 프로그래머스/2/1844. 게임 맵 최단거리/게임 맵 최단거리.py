@@ -1,24 +1,23 @@
 from collections import deque
 
 def solution(maps):
-    n, m = len(maps), len(maps[0])
+    move = [[-1, 0], [0, -1], [0, 1], [1, 0]]
+    n,m = len(maps),len(maps[0])
+    dist = [[-1] * m for _ in range(n)]
 
-    dy = [1, -1, 0, 0]
-    dx = [0, 0, 1, -1]
+    def bfs(s):
+        q = deque([s])
+        dist[s[0]][s[1]] = 1
+        while q:
+            cur = q.popleft()
+            for direct in move:
+                r, c = cur[0] + direct[0], cur[1] + direct[1]
+                if r < 0 or r >= n or c < 0 or c >= m: continue
+                if maps[r][c] == 0: continue
+                if dist[r][c] == -1:
+                    q.append([r, c])
+                    dist[r][c] = dist[cur[0]][cur[1]] + 1
+        return dist
 
-    que = deque()
-    que.append((1, 0, 0))
-
-    maps[0][0] = 0
-
-    while que:
-        count, i, j = que.popleft()
-        for k in range(4):
-            y = i + dy[k]
-            x = j + dx[k]
-            if y == n - 1 and x == m - 1: return count + 1
-            if 0 <= y < n and 0 <= x < m and maps[y][x]:
-                que.append((count + 1, y, x))
-                maps[y][x] = 0
-
-    return -1
+    bfs([0, 0])
+    return dist[n - 1][m - 1]
