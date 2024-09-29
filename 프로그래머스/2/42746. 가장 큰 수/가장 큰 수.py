@@ -1,11 +1,11 @@
 import functools
 
 def compare(a,b):
-    c1 = a+b
-    c2 = b+a
-    return (int(c1) > int(c2)) - (int(c1) < int(c2))
+    s1 = str(a) + str(b)
+    s2 = str(b) + str(a)
+    return (int(s1) > int(s2)) - (int(s1) < int(s2))
 
 def solution(numbers):
-    n = [str(x) for x in numbers]
-    n = sorted(n, key=functools.cmp_to_key(compare),reverse=True)
-    return str(int(''.join(n)))
+    sorted_nums = sorted(numbers, key = functools.cmp_to_key(lambda a,b: compare(a,b)), reverse = True)
+    answer = "".join(str(n) for n in sorted_nums)
+    return "0" if int(answer) == 0 else answer
