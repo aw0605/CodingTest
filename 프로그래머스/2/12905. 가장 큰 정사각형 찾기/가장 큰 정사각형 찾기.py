@@ -1,14 +1,15 @@
 def solution(board):
-    board_T = [list(x) for x in zip(*board)]
-    side = max(max(board[0]), max(board_T[0]))
+    r,c = len(board), len(board[0])
+    
+    for i in range(1,r):
+        for j in range(1,c):
+            if board[i][j] == 1:
+                up, left, up_left = (
+                    board[i-1][j],
+                    board[i][j-1],
+                    board[i-1][j-1]
+                )
+                
+                board[i][j] = min(up, left, up_left) + 1
 
-    n = len(board)
-    m = len(board[0])
-
-    for i in range(1, m):
-        for j in range(1, n):
-            if board[j][i] == 1:
-                board[j][i] += min(board[j-1][i],board[j][i-1],board[j-1][i-1])
-                if side < board[j][i]: side = board[j][i]
-                       
-    return side**2
+    return max(max(r) for r in board) ** 2
