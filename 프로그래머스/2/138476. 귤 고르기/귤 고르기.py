@@ -1,12 +1,14 @@
-import collections
+from collections import Counter
 
 def solution(k, tangerine):
-    answer = 0
-    tang_dict = collections.Counter(tangerine)
-
-    for v in sorted(tang_dict.values(), reverse = True):
-        k -= v
-        answer += 1
-        if k <= 0: break
-        
-    return answer
+    counter = Counter(tangerine)
+    sort_counter = sorted(counter.values(), reverse = True)
+    types = 0
+    total = 0
+    
+    for count in sort_counter:
+        total += count
+        types += 1
+        if total >= k: break
+    
+    return types
