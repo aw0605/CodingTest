@@ -1,7 +1,10 @@
 def solution(d, budget):
     answer = 0
-    for v in sorted(d):
-        budget -= v
-        if budget < 0: break
+    d.sort()
+    
+    for amount in d:
+        if budget < amount: break
+        budget -= amount
         answer += 1
+        
     return answer
