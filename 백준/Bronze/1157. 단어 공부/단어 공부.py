@@ -1,9 +1,9 @@
 s = input().upper()
-sDict = {}
+setS = list(set(s))
+arr = []
 
-for v in s:
-    sDict[v] = sDict.get(v, 0) + 1
-        
-maxVal = [k for k,v in sDict.items() if max(sDict.values()) == v]
+for v in setS:
+    count = s.count(v)
+    arr.append(count)
 
-print("?" if len(maxVal) > 1 else maxVal[0])
+print("?" if arr.count(max(arr)) > 1 else setS[arr.index(max(arr))])
