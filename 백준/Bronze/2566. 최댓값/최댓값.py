@@ -1,14 +1,10 @@
-arr = [list(map(int, input().split())) for _ in range(9)]
-ans = {}
+maxV = -1
 
 for i in range(9):
-    maxN = max(arr[i])
-    j = arr[i].index(maxN)
-    ans[maxN] = [i+1,j+1]
-
-maxV = max([v for v in ans.keys()])
+    arr = list(map(int, input().split()))
+    if max(arr) > maxV:
+        maxV = max(arr)
+        r,c = i+1, arr.index(maxV)+1
 
 print(maxV)
-print(ans[maxV][0], ans[maxV][1])
-    
-        
+print(r,c)
