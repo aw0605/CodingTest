@@ -4,7 +4,8 @@ input = sys.stdin.readline
 n = int(input())
 arr = list(set(input().strip() for _ in range(n)))
 
-arr.sort(key=lambda x: (len(x), x))
+arr.sort()
+arr.sort(key=len)
 
 for v in arr:
     print(v)
