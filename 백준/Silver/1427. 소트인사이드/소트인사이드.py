@@ -1,7 +1,7 @@
 import sys
 input = sys.stdin.readline
 
-n = input().strip()
-sort_num = sorted(n, reverse=True)
+n = list(map(int, input().strip()))
+n.sort(reverse=True)
 
-print("".join(sort_num))
+print("".join(map(str,n)))
