@@ -5,7 +5,6 @@ n = int(input())
 arr = list(map(int, input().split()))
 sort_arr = sorted(set(arr))
 
-dic = {sort_arr[i]:i for i in range(len(sort_arr))}
+dic = {v:i for i, v in enumerate(sort_arr)}
 
-for v in arr:
-    print(dic[v], end=" ")
+print(" ".join(map(str, [dic[v] for v in arr])))
