@@ -1,14 +1,11 @@
 import sys
-input = sys.stdin.readline
+data = sys.stdin.read().splitlines()
 
-n,m = map(int, input().split())
-no_listen = set([input().strip() for _ in range(n)])
-no_seen = set([input().strip() for _ in range(m)])
-    
+n, m = map(int, data[0].split())
+no_listen = set(data[1:n+1])
+no_seen = set(data[n+1:n+1+m])
+
 ans = sorted(no_listen & no_seen)
 
 print(len(ans))
 print("\n".join(ans))
-
-
-    
