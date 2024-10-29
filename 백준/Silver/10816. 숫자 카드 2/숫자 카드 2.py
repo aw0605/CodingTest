@@ -1,19 +1,17 @@
-from collections import defaultdict
 import sys
 input = sys.stdin.readline
 
 n = int(input())
-have = list(map(int, input().split()))
-have_dic = defaultdict(int)
-for v in have:
-    have_dic[v] += 1
-
+have = input().split()
 m = int(input())
-cards = list(map(int, input().split()))
+cards = input().split()
 
-ans = []
-for card in cards:
-    ans.append(str(have_dic.get(card, 0)))
+dic = {}
+for v in have:
+    if dic.get(v): dic[v] += 1
+    else: dic[v] = 1
+        
+ans = [str(dic.get(card, 0)) for card in cards]
     
 print(" ".join(ans))
 
