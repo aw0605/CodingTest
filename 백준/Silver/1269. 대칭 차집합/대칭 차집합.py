@@ -1,9 +1,9 @@
 import sys
-input = sys.stdin.readline
+data = sys.stdin.read().splitlines()
 
-a,b = map(int, input().split())
-aArr = set(map(int, input().split()))
-bArr = set(map(int, input().split()))
+a,b = map(int, data[0].split())
+aArr = set(map(int, data[1].split()))
+bArr = set(map(int, data[2].split()))
 
 ans = aArr^bArr
 
