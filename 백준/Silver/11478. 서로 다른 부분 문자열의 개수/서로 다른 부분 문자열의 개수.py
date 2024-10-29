@@ -1,8 +1,9 @@
 s = input()
-ans = set()
+ans = {}
+k = len(s)
 
-for i in range(len(s)):
-    for j in range(i,len(s)):
-        ans.add(s[i:j+1])
+for i in range(k):
+    for j in range(k-i):
+        ans[s[j:j+i+1]] = 1
     
 print(len(ans))
