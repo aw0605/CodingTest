@@ -11,5 +11,4 @@ for _ in range(n):
         
 ans = sorted(cur, reverse=True)
 
-for v in ans:
-    print(v)
+print('\n'.join(ans))
