@@ -1,19 +1,22 @@
 import sys
-data = sys.stdin.read().splitlines()
+import math
+input = sys.stdin.readline
 
-def isPrime(x):
-    if x <= 1: return False
-    for i in range(2,int(x**0.5)+1):
-        if x%i==0: return False
+t = int(input())
+
+def isPrime(n):
+    if n <= 1: return False
+    if n <= 3: return True
+    if n % 2 == 0 or n % 3 == 0: return False
+    for i in range(5, int(math.sqrt(n)) + 1, 6):
+        if n % i == 0 or n % (i + 2) == 0: return False
     return True
 
-t = int(data[0])
-ans = []
-
-for i in range(1,t+1):
-    n = int(data[i])
-    while not isPrime(n):
-        n += 1
-    ans.append(str(n))
-
-print("\n".join(ans))
+for i in range(t):
+    n = (int(input()))
+    while True:
+        if isPrime(n):
+            print(n)
+            break
+        else:
+            n += 1
