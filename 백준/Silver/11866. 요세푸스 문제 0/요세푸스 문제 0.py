@@ -1,18 +1,16 @@
-from collections import deque
 import sys
 input = sys.stdin.readline
 
 n,k = map(int, input().split())
-q = deque()
-
-ans = []
-
-for i in range(1,n+1):
-    q.append(i)
+q = [i+1 for i in range(n)]
     
-while q:
-    for _ in range(k-1):
-        q.append(q.popleft())
-    ans.append(q.popleft())
+point = 0
 
-print(str(ans).replace("[","<").replace("]",">"))
+print("<",end="")
+
+while len(q) > 1:
+    point = (point + k - 1) % n
+    print(str(q.pop(point))+",", end=" ")
+    n -= 1
+
+print(str(q[0])+">")
