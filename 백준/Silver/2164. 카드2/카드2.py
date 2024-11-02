@@ -1,15 +1,10 @@
-from collections import deque
 import sys
 input = sys.stdin.readline
 
 n = int(input())
-q = deque()
 
-for i in range(1,n+1):
-    q.append(i)
-    
-while len(q) != 1:
-    q.popleft()
-    q.append(q.popleft())
+power = 1
+while power * 2 <= n:
+    power *= 2
 
-print(q[0])
+print(n if n == power else 2*(n-power))
