@@ -1,19 +1,14 @@
-from collections import deque
 import sys
 input = sys.stdin.readline
 
 n = int(input())
-structure = list(map(int, input().split()))
-a = list(map(int, input().split()))
+structure = input().split()
+a = input().split()
 
 m = int(input())
-b = list(map(int, input().split()))
+b = input().split()
 
-ans = deque()
+q = [a[i] for i in range(n) if structure[i] == "0"]
+q.reverse()
 
-for v in range(n):
-    if structure[v] == 0: ans.appendleft(a[v])
-        
-for i in range(m):
-    ans.append(b[i])
-    print(ans.popleft(), end=' ')
+print(" ".join((q+b)[:m]))
