@@ -3,12 +3,6 @@ import sys
 input = sys.stdin.readline
 
 n,m = map(int, input().split())
-arr = [input().strip() for _ in range(n)]
-mArr = [v for v in arr if len(v) >= m]
-counter = Counter(mArr)
+counter = Counter([i for _ in range(n) if len(i := input()) > m])
 
-ans = list(set(mArr))
-
-ans.sort(key=lambda x: (-counter[x], -len(x), x))
-
-print("\n".join(ans))
+sys.stdout.write(''.join(sorted(counter, key= lambda x: (-counter[x], -len(x), x))))
