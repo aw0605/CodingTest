@@ -2,8 +2,8 @@ import sys
 
 n = int(sys.stdin.readline())
 
-def fibo(n):
-    if n <= 1: return n
-    return fibo(n-1) + fibo(n-2)
+fib = [0,1]
+for i in range(2,n+1):
+    fib.append(fib[i-1] + fib[i-2])
 
-print(fibo(n))
+print(fib[n])
