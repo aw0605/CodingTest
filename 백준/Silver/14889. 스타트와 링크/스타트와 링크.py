@@ -1,30 +1,25 @@
+from itertools import combinations
 import sys
 input = sys.stdin.readline
 
 n = int(input())
 status = [list(map(int, input().split())) for _ in range(n)]
 
-visited = [False] * n
-diff = sys.maxsize
+people = range(n)
+diff = float('inf')
 
-def dfs(a,idx):
-    global diff
-    if a == n//2:
-        start = 0
-        link = 0
-        for i in range(n):
-            for j in range(n):
-                if visited[i] and visited[j]: start += status[i][j]
-                elif not visited[i] and not visited[j]: link += status[i][j]
-        diff = min(diff, abs(start - link))
-        return
-    else:
-        for i in range(idx,n):
-            if not visited[i]:
-                visited[i] = True
-                dfs(a+1, i+1)
-                visited[i] = False
-                
-dfs(0,0)
+def team_stat(team):
+    stat = 0
+    for i, j in combinations(team, 2):
+        stat += status[i][j] + status[j][i]
+    return stat
+
+for start in combinations(people, n // 2):
+    link = [i for i in people if i not in start]
+
+    start_st = team_stat(start)
+    link_st = team_stat(link)
+
+    diff = min(diff, abs(start_st - link_st))
+
 print(diff)
-    
