@@ -1,24 +1,19 @@
 import sys
 input = sys.stdin.readline
 
-n,m,k= map(int, input().split())
+N, M, K = map(int, input().split())
+dp = [[0]*(M+1) for _ in range(N+1)]
 
-arr = [input().strip() for _ in range(n)]
+check = 'BW'
+for i in range(1, N+1):
+    line = input().rstrip()
+    for j, v in enumerate(line, 1):
+        dp[i][j] = int(v != check[(i+j)%2]) + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1]
 
-def check(start):
-    dp = [[0] * (m+1) for _ in range(n+1)]
-    for i in range(n):
-        for j in range(m):
-            if ((i + j) % 2 == 0): v = (arr[i][j] != start)
-            else: v = (arr[i][j] == start)
+answer = K*K
+for i in range(K, N+1):
+    for j in range(K, M+1):
+        tmp = dp[i][j] - dp[i-K][j] - dp[i][j-K] + dp[i-K][j-K]
+        answer = min(answer, tmp, K*K-tmp)
 
-            dp[i + 1][j + 1] = dp[i][j + 1] + dp[i + 1][j] - dp[i][j] + v
-
-    MIN = n * m
-    for i in range(1, n-k+2):
-        for j in range(1, m-k+2):
-            MIN = min(MIN, dp[i+k-1][j+k-1] - dp[i+k-1][j-1] - dp[i-1][j+k-1] + dp[i-1][j-1])
-
-    return MIN
-
-print(min(check('B'), check('W')))
+print(answer)
