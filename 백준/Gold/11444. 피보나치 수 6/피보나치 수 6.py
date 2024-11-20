@@ -10,7 +10,7 @@ memo[1], memo[2] = 1,1
 def fibo(n):
     if n in memo: return memo[n]
     tmp = n // 2
-    if n % 2 == 0: memo[n] = (fibo(tmp) * (2 * fibo(tmp - 1) + fibo(tmp)) % MOD) % MOD
+    if n % 2 == 0: memo[n] = (fibo(tmp) * (2 * fibo(tmp - 1) + fibo(tmp))) % MOD
     else: memo[n] = ((fibo(tmp + 1) ** 2) + (fibo(tmp) ** 2)) % MOD
     return memo[n]
     
