@@ -2,9 +2,9 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-a = {int(num): 1 for num in input().split()} 
+a = set(map(int, input().split()))
 m = int(input())
 b = list(map(int, input().split()))
 
 for num in b:
-    print(a.get(num, 0))
+    print(1 if num in a else 0)
