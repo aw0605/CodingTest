@@ -1,16 +1,16 @@
 import sys
 input = sys.stdin.readline
 
-n,m = map(int, input().split())
+n, m = map(int, input().split())
 trees = list(map(int, input().split()))
-s,e = 1, max(trees)
+s, e = 0, max(trees)
+
+def get_total(h):
+    return sum(tree - h if tree > h else 0 for tree in trees)
 
 while s <= e:
-    total = 0
     mid = (s + e) // 2
-    for tree in trees:
-        if tree >= mid: total += tree - mid
-    if total >= m: s = mid + 1
+    if get_total(mid) >= m: s = mid + 1
     else: e = mid - 1
-        
+
 print(e)
