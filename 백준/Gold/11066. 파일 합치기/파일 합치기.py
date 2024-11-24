@@ -3,17 +3,27 @@ input = sys.stdin.readline
 
 t = int(input())
 
-for _ in range(t):
+def sol():
     k = int(input())
     arr = list(map(int, input().split()))
+    sub = [0] * (k + 1)
     
-    dp = [[1e9]*k for _ in range(k)]
-    sub = [0]*(k+1)
-    for i in range(1, k+1): sub[i] = arr[i-1] + sub[i-1]
-    for i in range(k): dp[i][i] = 0
-    for i in range(2, k+1):
-        for j in range(k-i+1):
-            for l in range(j, j+i-1):
-                dp[j][j+i-1] = min(dp[j][j+i-1], dp[j][l]+dp[l+1][j+i-1]+sub[j+i]-sub[j]) 
+    rst = [[0] * k for _ in range(k)]
+    opt = [[0] * k for _ in range(k)]
     
-    print(dp[0][k-1])
+    for i in range(k): sub[i+1] = sub[i] + arr[i]
+    for i in range(k): opt[i][i] = i
+
+    for length in range(2, k + 1):
+        for i in range(k - length + 1):
+            j = i + length - 1
+            rst[i][j] = float('inf')
+            for l in range(opt[i][j-1], min(opt[i+1][j]+1, j)):
+                cost = rst[i][l] + rst[l+1][j] + sub[j+1] - sub[i]
+                if cost < rst[i][j]:
+                    rst[i][j] = cost
+                    opt[i][j] = l
+
+    print(rst[0][k-1])
+
+for _ in range(t): sol()
