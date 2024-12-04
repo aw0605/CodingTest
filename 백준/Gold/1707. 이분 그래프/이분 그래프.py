@@ -1,21 +1,24 @@
+from collections import deque
 import sys
-sys.setrecursionlimit(1000000)
 input = sys.stdin.readline
 
 k = int(input())
 
-def dfs(s, g):
+def bfs(s, g):
+    q = deque([s])
     visited[s] = g
-    for i in graph[s]:
-        if not visited[i]:
-            x = dfs(i, -g)
-            if not x: return 0
-        elif visited[s] == visited[i]: return 0
+    while q:
+        x = q.popleft()
+        for i in graph[x]:
+            if not visited[i]:
+                visited[i] = -1 * visited[x]
+                q.append(i)
+            elif visited[x] == visited[i]: return 0
     return 1
 
 for _ in range(k):
     v, e = map(int, input().split())
-    graph = [[] for _ in range(v + 1)]
+    graph = [[] for i in range(v + 1)]
     visited = [0] * (v + 1)
     for _ in range(e):
         a, b = map(int, input().split())
@@ -24,7 +27,7 @@ for _ in range(k):
 
     for i in range(1, v + 1):
         if not visited[i]:
-            res = dfs(i, 1)
+            res = bfs(i, 1)
             if not res: break
 
-    print("YES" if res else "NO")
+    print('YES' if res else 'NO')
