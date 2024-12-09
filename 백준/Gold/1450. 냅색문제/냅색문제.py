@@ -1,34 +1,29 @@
-from itertools import combinations
+import bisect
 import sys
 input = sys.stdin.readline
 
-n, c = map(int, input().split())
-weights = list(map(int, input().split()))
+n,c = map(int,input().split())
 
-w1, w2 = weights[:n//2], weights[n//2:]
-sum1, sum2 = [],[]
+weights = list(map(int,input().split()))
+w1,w2 = weights[:n//2],weights[n//2:]
+sum1,sum2 = [],[]
 
-for i in range(len(w1) + 1):
-    comb1 = combinations(w1, i)
-    for comb in comb1:
-        sum1.append(sum(comb))
-        
-for i in range(len(w2) + 1):
-    comb2 = combinations(w2, i)
-    for comb in comb2:
-        sum2.append(sum(comb))
+def bf(w,s,i,t):
+    if len(w) == i:
+        s.append(t)
+        return s
+    bf(w,s,i+1,t)
+    bf(w,s,i+1,t+w[i])
+    return s
 
-sum1.sort()
+sum1 = bf(w1,sum1,0,0)
+sum2 = sorted(bf(w2,sum2,0,0))
 
 ans = 0
 
-for v in sum2:
-    if v > c: continue
-    l,r = 0, len(sum1) - 1
-    while l <= r:
-        mid = (l + r) // 2
-        if sum1[mid] + v > c: r = mid - 1    
-        else: l = mid + 1
-    ans += r + 1
-
+for v in sum1:
+    if c < v: continue
+    i = bisect.bisect_right(sum2,c-v)
+    ans += i
+    
 print(ans)
