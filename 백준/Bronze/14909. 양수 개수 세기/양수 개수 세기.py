@@ -1,7 +1,7 @@
 import sys
 input = sys.stdin.readline
 
-arr = list(map(int, input().split()))
-ans = [n for n in arr if n > 0]
+arr = map(int, input().split())
+ans = sum(1 for n in arr if n > 0)
 
-print(len(ans))
+print(ans)
