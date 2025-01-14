@@ -1,12 +1,12 @@
 import sys
 input = sys.stdin.readline
 
-n,x,k = map(int, input().split())
+n, x, k = map(int, input().split())
 
-arr = [0] * n
-arr[x-1] = 1
+ans = x
 for _ in range(k):
-    a,b = map(int, input().split())
-    arr[a-1], arr[b-1] = arr[b-1], arr[a-1]
-    
-print(arr.index(1)+1)
+    a, b = map(int, input().split())
+    if ans == a: ans = b
+    elif ans == b: ans = a
+
+print(ans)
