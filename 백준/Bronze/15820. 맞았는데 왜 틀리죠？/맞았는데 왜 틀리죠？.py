@@ -1,21 +1,19 @@
 import sys
 input = sys.stdin.readline
 
-s1,s2 = map(int, input().split())
+s1, s2 = map(int, input().split())
 
-r1,r2 = 0,0
-for _ in range(s1):
-    a,c = map(int, input().split())
-    if a != c:
+li1 = [list(map(int, input().split())) for _ in range(s1)]
+li2 = [list(map(int, input().split())) for _ in range(s2)]
+
+for i in range(s1):
+    if li1[i][0] != li1[i][1]:
         print("Wrong Answer")
-        break
-    else: r1 += 1
+        exit()
         
-for _ in range(s2):
-    a,c = map(int, input().split())
-    if a != c:
+for i in range(s2):
+    if li2[i][0] != li2[i][1]:
         print("Why Wrong!!!")
-        break
-    else: r2 += 1
+        exit()
         
-if r1 == s1 and r2 == s2: print("Accepted")
+print("Accepted")
