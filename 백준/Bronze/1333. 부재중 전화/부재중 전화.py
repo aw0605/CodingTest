@@ -1,13 +1,13 @@
-n, l, d = map(int, input().split())
+n, l, d = map(int,input().split())
 
-time = [1] * (n*l + ((n-1)*5))
+l += 5
+playing = 0
+cur = d
 for i in range(n):
-    start = (l+5) * i
-    for j in range(start, start+l): time[j] = 0
+    playing += l
+    while True:
+        if cur < playing-5: cur += d
+        else: break
+    if playing - 5 <= cur < playing: break
         
-cur = 0
-while cur < len(time):
-    if time[cur]: break
-    cur += d
-    
 print(cur)
