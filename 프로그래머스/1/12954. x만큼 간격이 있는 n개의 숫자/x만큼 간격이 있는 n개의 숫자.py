@@ -1,2 +1,4 @@
 def solution(x, n):
-    return [i * x + x for i in range(n)]
+    ans = [x]
+    while len(ans) != n: ans.append(ans[-1] + x)
+    return ans
