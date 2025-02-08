@@ -1,2 +1,5 @@
 def solution(n):
-    return sum(int(v) for v in str(n))
+    ans = 0
+    arr = list(str(n))
+    for v in arr: ans += int(v)
+    return ans
