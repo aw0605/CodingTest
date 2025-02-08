@@ -1,2 +1,2 @@
-def solution(num1, num2):
-    return int(num1 / num2);
+def solution(n1, n2):
+    return n1 // n2
