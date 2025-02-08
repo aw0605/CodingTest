@@ -1,2 +1,2 @@
-def solution(num):
-    return "Odd" if num % 2 else "Even"
+def solution(n):
+    return "Odd" if n % 2 else "Even"
